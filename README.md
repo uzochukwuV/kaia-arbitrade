@@ -78,3 +78,15 @@ To know more about its features, check out our [website](https://scaffoldeth.io)
 We welcome contributions to Scaffold-ETH 2!
 
 Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+
+
+
+## **🚀 App Dispute UX Flow**
+| Step | Action |
+|------|--------|
+| 🛍️ **Buyer purchases NFT** | `payForStock(nftId)` |
+| 🚨 **Buyer/Seller raises dispute** | `openDispute(nftId)` |
+| 🎭 **Resolvers vote on outcome** | `voteOnDispute(nftId, voteForBuyer)` |
+| 🔔 **User gets notified of updates** | `PushAPI.channels.sendNotification()` |
+| 🏆 **Dispute resolved, funds released** | `resolveDispute(nftId)` |
+| ⚖️ **DAO intervention for large disputes** | `submitDisputeToDAO(nftId)` |
