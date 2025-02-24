@@ -587,6 +587,7 @@ export function NFTState({ id }: { id: string }) {
   }, [nftLoading, id, marketplaceData]);
 
   return (
+    <>
     <NFTCard
       key={nft?.id}
       id={nft?.id.toString() || ""}
@@ -603,6 +604,7 @@ export function NFTState({ id }: { id: string }) {
       quantity={nft?.quantity}
       harvestDate={nft?.harvestDate}
     />
+    </>
   );
 }
 
