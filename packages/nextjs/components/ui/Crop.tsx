@@ -123,6 +123,7 @@ export function Crop({ id }: { id: bigint }) {
         <div className="mt-4 flex items-center gap-2"></div>
       </div>
       <div className="flex items-center p-4 pt-0">
+        <input type="number" name="price" id="price" className=" py-4 px-6 border-slate-400"  />
         <div
           onClick={handleListSale}
           className="flex cursor-pointer  bg-green-300 py-2 px-6 rounded items-center gap-2 text-sm text-muted-foreground"

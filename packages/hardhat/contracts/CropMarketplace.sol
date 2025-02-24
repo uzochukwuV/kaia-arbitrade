@@ -24,6 +24,7 @@ contract CropMarketplace {
     mapping(address => uint128) public resolverReward;
     uint256 public resolverStakeRequirement = 1000 * 10 ** 18; // Example stake required
     mapping(address => uint256) public resolverStake;
+    uint256 xfiToCrop =  1;
 
     struct AssetData {
         address owner;
@@ -62,6 +63,7 @@ contract CropMarketplace {
     event DisputeOpened(uint128 indexed nftId, address indexed disputer, bool isPayer);
     event DisputeVoted(uint128 indexed nftId, address indexed resolver, bool voteForBuyer);
     event DisputeResolved(uint128 indexed nftId, bool voteForBuyer);
+     event TokenUpdated(string tokenType, address oldAddress, address newAddress);
 
     // nfts
     uint128[] public assetIds;
@@ -89,9 +91,26 @@ contract CropMarketplace {
     constructor(address _nftAddress, address _coinAddress, address _governanceTokenAddress) {
         owner = msg.sender;
         nft = CropNft(_nftAddress);
-        coin = CropCoin(_coinAddress);
+        coin = IERC20(_coinAddress);
         governanceToken = IERC20(_governanceTokenAddress);
     }
+
+    function updateNFTAddress(address _newNFT) external onlyOwner {
+        emit TokenUpdated("NFT", address(nft), _newNFT);
+        nft = CropNft(_newNFT);
+    }
+
+    function updateCoinAddress(address _newCoin) external onlyOwner {
+        emit TokenUpdated("Coin", address(coin), _newCoin);
+        coin = IERC20(_newCoin);
+    }
+
+    function updateGovernanceTokenAddress(address _newGovToken) external onlyOwner {
+        emit TokenUpdated("GovernanceToken", address(governanceToken), _newGovToken);
+        governanceToken = IERC20(_newGovToken);
+    }
+
+
     //
 
     function mintNFT(address to, string memory uri) external onlyOwner {
@@ -151,22 +170,32 @@ contract CropMarketplace {
         return assetData;
     }
 
-    function payForStock(uint128 nftId) external noReentrant returns (bool) {
+    function payForStock(uint128 nftId, bool withXfi) external noReentrant payable returns (bool) {
         AssetData storage assetData = assets[nftId];
         require(assetData.price > 0, "INVALID_PRICE");
         require(assetData.owner != msg.sender, "CANT_BUY_YOUR_PRODCT");
 
         // Ensure payer has approved the contract to spend the amount
-        require(coin.allowance(msg.sender, address(this)) >= assetData.price, "INSUFFICIENT_ALLOWANCE");
+        if(withXfi){
+            require(msg.value >= assetData.price , "NOT_ENOUGH_XFI");
 
-        bool success = coin.transferFrom(msg.sender, address(this), assetData.price);
-        require(success, "TRANSFER_FAILED");
+            assetData.payedFor = true;
+            assetData.payer = msg.sender;
 
-        assetData.payedFor = true;
-        assetData.payer = msg.sender;
+            emit PaymentReceived(nftId, msg.sender, assetData.price);
+            return true;
+        }else {
+            require(coin.allowance(msg.sender, address(this)) >= assetData.price, "INSUFFICIENT_ALLOWANCE");
 
-        emit PaymentReceived(nftId, msg.sender, assetData.price);
-        return true;
+            bool success = coin.transferFrom(msg.sender, address(this), assetData.price);
+            require(success, "TRANSFER_FAILED");
+
+            assetData.payedFor = true;
+            assetData.payer = msg.sender;
+
+            emit PaymentReceived(nftId, msg.sender, assetData.price);
+            return true;
+        }
     }
 
     function mark_as_delivered(uint128 nftId, bool isPayer) external noReentrant {
@@ -215,6 +244,8 @@ contract CropMarketplace {
         }
         return ids;
     }
+
+
     function get_user_purchase(uint128 limit, address user) public view returns (uint128[] memory) {
         uint128[] memory ids = new uint128[](limit);
         uint step = 0;

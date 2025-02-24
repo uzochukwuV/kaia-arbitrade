@@ -5,8 +5,21 @@ import { LoaderIcon } from "react-hot-toast";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 import { MarketNFTState } from "~~/components/ui/MarketNftState";
+import { NFTCardProps } from "~~/types/nft";
+import { useState } from "react";
+import { createContext } from "react";
+
+interface Context {
+  nfts: NFTCardProps[] | null;
+  setNft: (nfts: NFTCardProps[]) => void;
+}
+
+
+export const nftContext = createContext<Context>({} as Context);
 
 export default function ExplorePage() {
+  const [nfts, setNft] = useState<NFTCardProps[] | null>(null);
+
   const { data, isFetching } = useScaffoldReadContract({
     contractName: "CropMarketplace",
     functionName: "get_listings",
@@ -15,6 +28,7 @@ export default function ExplorePage() {
 
   return (
     <>
+    <nftContext.Provider value={{nfts, setNft}}>
       {/*  */}
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8">
@@ -541,6 +555,7 @@ export default function ExplorePage() {
           </div>
         </div>
       </div>
+      </nftContext.Provider>
     </>
   );
 }
