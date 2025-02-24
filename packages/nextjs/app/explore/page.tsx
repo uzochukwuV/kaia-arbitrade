@@ -562,10 +562,10 @@ export function MarketNFTState({ id }: { id: string }) {
   return (
     <MarketNFTCARD
       key={nft?.id}
-      id={nft?.id.toString()!}
+      id={nft?.id.toString() || ""}
       name={nft?.name}
       description={nft?.description}
-      price={BigInt(nft?.price! || 0)}
+      price={BigInt(nft?.price || 0)}
       image={nft?.image}
       owner={nft?.owner}
       payer={nft?.payer}
@@ -591,10 +591,10 @@ export function NFTState({ id }: { id: string }) {
   return (
     <NFTCard
       key={nft?.id}
-      id={nft?.id.toString()!}
+      id={nft?.id.toString() || ""}
       name={nft?.name}
       description={nft?.description}
-      price={BigInt(nft?.price! || 0)}
+      price={BigInt(nft?.price || 0)}
       image={nft?.image}
       owner={nft?.owner}
       payer={nft?.payer}
@@ -745,6 +745,7 @@ const MarketNFTCARD: FC<NFTCardProps> = ({
               tags.split(",").map(i => {
                 return (
                   <div
+                  key={i}
                     className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
                     data-v0-t="badge"
                   >

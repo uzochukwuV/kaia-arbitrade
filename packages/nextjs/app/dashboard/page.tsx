@@ -202,7 +202,7 @@ export default function Dashboard() {
   );
 }
 
-function Purchases({ data, isLoading }: { data: readonly BigInt[] | undefined; isLoading: boolean }) {
+function Purchases({ data, isLoading }: { data: readonly bigint[] | undefined; isLoading: boolean }) {
   return (
     <div>
       <div
@@ -289,7 +289,7 @@ function PurchaseNFts({ id }: { id: string }) {
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium">#{id}</td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
-        {nft?.price?.toString() && formatEther(nft?.price!)!} CROP
+        {nft?.price?.toString() && formatEther(nft?.price!)! || ""} CROP
       </td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
         <div

@@ -2641,6 +2641,11 @@ const deployedContracts = {
               name: "buyerChecked",
               type: "bool",
             },
+            {
+              internalType: "bool",
+              name: "disputed",
+              type: "bool",
+            },
           ],
           stateMutability: "view",
           type: "function",
@@ -2660,6 +2665,25 @@ const deployedContracts = {
               internalType: "contract IERC20",
               name: "",
               type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "disputeIds",
+          outputs: [
+            {
+              internalType: "uint128",
+              name: "",
+              type: "uint128",
             },
           ],
           stateMutability: "view",
@@ -2695,6 +2719,11 @@ const deployedContracts = {
           name: "disputes",
           outputs: [
             {
+              internalType: "uint256",
+              name: "id",
+              type: "uint256",
+            },
+            {
               internalType: "uint128",
               name: "nftId",
               type: "uint128",
@@ -2729,6 +2758,19 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [],
+          name: "getAllDisputes",
+          outputs: [
+            {
+              internalType: "uint128[]",
+              name: "",
+              type: "uint128[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
             {
               internalType: "address",
@@ -2738,6 +2780,55 @@ const deployedContracts = {
           ],
           name: "getAvailableResolverReward",
           outputs: [
+            {
+              internalType: "uint128",
+              name: "",
+              type: "uint128",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint128",
+              name: "nftId",
+              type: "uint128",
+            },
+          ],
+          name: "getDisputeData",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "uint128",
+              name: "",
+              type: "uint128",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+            {
+              internalType: "uint128",
+              name: "",
+              type: "uint128",
+            },
             {
               internalType: "uint128",
               name: "",
@@ -2893,6 +2984,11 @@ const deployedContracts = {
                 {
                   internalType: "bool",
                   name: "buyerChecked",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "disputed",
                   type: "bool",
                 },
               ],

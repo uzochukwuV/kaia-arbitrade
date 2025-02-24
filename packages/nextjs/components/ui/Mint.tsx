@@ -55,7 +55,7 @@ export default function NFTMintingForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let url = await createListNFT();
+    const url = await createListNFT();
 
     if (url == "") {
       toast("Unable to Stage Image, check your internet connection");

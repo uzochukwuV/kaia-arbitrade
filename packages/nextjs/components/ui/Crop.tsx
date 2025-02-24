@@ -18,7 +18,7 @@ export function Crop({ id }: { id: bigint }) {
   });
   const [price, setPrice] = useState("0.2");
 
-  const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT! });
+  const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT || "" });
 
   useEffect(() => {
     if (connectedAddressNFT && !nft) {

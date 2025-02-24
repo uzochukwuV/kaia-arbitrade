@@ -31,9 +31,9 @@ function Profile() {
     args: [BigInt(10), userAddress],
   });
 
-  function toStriped(list: readonly BigInt[]) {
+  function toStriped(list: readonly bigint[]) {
     if (!list) return [];
-    let x: BigInt[] = [];
+    const x: bigint[] = [];
     for (let i = 0; i < list.length; i++) {
       if (list[i] == BigInt(0)) {
         continue;
@@ -49,7 +49,7 @@ function Profile() {
       notification.error(parsedError);
     } else {
       console.log(data);
-      setTotalNft(prv => data?.length! + toStriped(trade!).length + toStriped(purchase!).length);
+      setTotalNft(prv => data?.length || 0 + toStriped(trade || []).length + toStriped(purchase || []).length);
     }
   }, [error, isFetching, isLoading, data]);
 
@@ -86,8 +86,8 @@ function Profile() {
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+               
+                strokeLinejoin="round"
                 className="lucide lucide-package h-4 w-4 mr-2"
               >
                 <path d="m7.5 4.27 9 5.15"></path>
@@ -109,8 +109,8 @@ function Profile() {
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+               
+                strokeLinejoin="round"
                 className="lucide lucide-store h-4 w-4 mr-2"
               >
                 <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
@@ -133,8 +133,8 @@ function Profile() {
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              
+                strokeLinejoin="round"
                 className="lucide lucide-store h-4 w-4 mr-2"
               >
                 <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
