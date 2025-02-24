@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
+import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import { ERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 
 contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
     // Constants
@@ -15,7 +15,7 @@ contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
     // State variables
     uint256 public immutable max_airdrop;
     uint256 public airdrop_counter;
-    
+
     mapping(address => bool) public airdropers;
     mapping(address => bool) public minters;
 
@@ -24,11 +24,11 @@ contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
     event MinterAdded(address indexed minter);
     event MinterRemoved(address indexed minter);
 
-    constructor(address initialOwner, string memory _name, string memory _symbol)
-        ERC20(_name, _symbol)
-        Ownable(initialOwner)
-        ERC20Permit(_name)
-    {
+    constructor(
+        address initialOwner,
+        string memory _name,
+        string memory _symbol
+    ) ERC20(_name, _symbol) Ownable(initialOwner) ERC20Permit(_name) {
         max_airdrop = 2000 * 10 ** decimals();
         _mint(initialOwner, INITIAL_SUPPLY);
     }
@@ -56,10 +56,10 @@ contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
     function getAirdrop() external whenNotPaused {
         require(!airdropers[msg.sender], "Already claimed airdrop");
         require(airdrop_counter < max_airdrop, "Airdrop limit reached");
-        
+
         airdropers[msg.sender] = true;
         airdrop_counter += AIRDROP_AMOUNT;
-        
+
         _mint(msg.sender, AIRDROP_AMOUNT);
         emit AirdropClaimed(msg.sender, AIRDROP_AMOUNT);
     }

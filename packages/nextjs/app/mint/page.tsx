@@ -1,11 +1,11 @@
+import NFTMintingForm from "~~/components/ui/Mint";
 
-import NFTMintingForm from '~~/components/ui/Mint';
 function MintPage() {
   return (
-    <div className=' flex justify-center items-center'>
-        <NFTMintingForm />
+    <div className=" flex justify-center items-center">
+      <NFTMintingForm />
     </div>
-  )
+  );
 }
 
-export default MintPage
+export default MintPage;

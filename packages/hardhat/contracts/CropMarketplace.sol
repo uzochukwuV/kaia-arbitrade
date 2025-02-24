@@ -5,18 +5,16 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 import "./CropNft.sol";
 import "./CropCoin.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract CropMarketplace {
-
     address public immutable owner;
     string public name = "CropSwap";
     CropNft public nft;
     IERC20 public coin;
     IERC20 public governanceToken;
     mapping(uint128 => AssetData) public assets;
-    uint256 private totalGovernanceToken =0;
+    uint256 private totalGovernanceToken = 0;
     uint256 private totalMarketToken = 0;
     uint256 public minResolvers = 5;
 
@@ -24,19 +22,18 @@ contract CropMarketplace {
     uint128[] public disputeIds;
     mapping(address => bool) public isResolver;
     mapping(address => uint128) public resolverReward;
-    uint256 public resolverStakeRequirement = 1000 * 10**18; // Example stake required
+    uint256 public resolverStakeRequirement = 1000 * 10 ** 18; // Example stake required
     mapping(address => uint256) public resolverStake;
 
     struct AssetData {
         address owner;
-        uint128  price;
+        uint128 price;
         bool payedFor;
         bool booked;
         address payer; // buyer
         bool payerChecked;
         bool buyerChecked; // seller error
         bool disputed;
-        
     }
 
     struct Dispute {
@@ -52,24 +49,22 @@ contract CropMarketplace {
     }
 
     struct userGovData {
-         bool isResolver;
-         uint256 staked ;
-         uint128 reward;
+        bool isResolver;
+        uint256 staked;
+        uint128 reward;
     }
 
     event PaymentWithdrawn(uint128 indexed nftId, address indexed seller, uint256 amount);
-    event Listed(uint128 indexed nftId, address indexed lister, uint128  price);
-    event PaymentReceived(uint128 indexed nftId, address indexed payer, uint128  price);
+    event Listed(uint128 indexed nftId, address indexed lister, uint128 price);
+    event PaymentReceived(uint128 indexed nftId, address indexed payer, uint128 price);
     event ItemDelivered(uint128 indexed nftId, address indexed confirmer, bool isPayer);
 
     event DisputeOpened(uint128 indexed nftId, address indexed disputer, bool isPayer);
     event DisputeVoted(uint128 indexed nftId, address indexed resolver, bool voteForBuyer);
     event DisputeResolved(uint128 indexed nftId, bool voteForBuyer);
-    
 
     // nfts
     uint128[] public assetIds;
-    
 
     bool internal locked;
 
@@ -96,46 +91,38 @@ contract CropMarketplace {
         nft = CropNft(_nftAddress);
         coin = CropCoin(_coinAddress);
         governanceToken = IERC20(_governanceTokenAddress);
-        
     }
-    // 
+    //
 
     function mintNFT(address to, string memory uri) external onlyOwner {
         // Optional: Add access control if needed
         nft.safeMint(to, uri);
         // Assuming you add totalSupply to CropNft
     }
-    
+
     // Function to get NFT metadata
     function getNFTMetadata(uint256 tokenId) external view returns (string memory) {
         return nft.tokenURI(tokenId);
     }
-    
+
     // Function to get user's NFTs
     function getUserNFTs(address user) external view returns (uint[] memory) {
         return nft.getAllUserNFT(user);
     }
-    // 
+    //
 
-    function list_for_sale(uint128 nftId, uint128  price) external noReentrant returns (bool) {
-        require(nft.ownerOf(nftId)== msg.sender ,"NOT_OWNED");
-        require(nft.isApprovedForAll(msg.sender, address(this)) || 
-                nft.getApproved(nftId) == address(this), "NOT_APPROVED");
+    function list_for_sale(uint128 nftId, uint128 price) external noReentrant returns (bool) {
+        require(nft.ownerOf(nftId) == msg.sender, "NOT_OWNED");
+        require(
+            nft.isApprovedForAll(msg.sender, address(this)) || nft.getApproved(nftId) == address(this),
+            "NOT_APPROVED"
+        );
 
         nft.transferFrom(msg.sender, address(this), nftId);
-        
-        AssetData memory data = AssetData(
-            msg.sender,
-            price,
-            false,
-            false,
-            address(0),
-            false,
-            false,
-            false
-        );
-        assets[nftId] =data;
-        
+
+        AssetData memory data = AssetData(msg.sender, price, false, false, address(0), false, false, false);
+        assets[nftId] = data;
+
         // add nft
         assetIds.push(nftId);
         emit Listed(nftId, msg.sender, price);
@@ -144,7 +131,7 @@ contract CropMarketplace {
 
     function get_listings(uint start, uint end) public view returns (uint[] memory) {
         uint[] memory ids = new uint[](end - start);
-        
+
         uint counter = 0;
         for (uint i = start; i < assetIds.length && i < end; i++) {
             if (!assets[assetIds[i]].payedFor) {
@@ -153,7 +140,6 @@ contract CropMarketplace {
             }
         }
         return ids;
-
     }
     function get_stock_data(uint128 nftId) public view returns (AssetData memory) {
         AssetData storage assetData = assets[nftId];
@@ -161,103 +147,88 @@ contract CropMarketplace {
     }
 
     function user_govern_data(address user) public view returns (userGovData memory) {
-        userGovData memory  assetData =userGovData(
-            isResolver[user],
-            resolverStake[user],
-            resolverReward[user]
-        );
+        userGovData memory assetData = userGovData(isResolver[user], resolverStake[user], resolverReward[user]);
         return assetData;
     }
 
-
     function payForStock(uint128 nftId) external noReentrant returns (bool) {
-            AssetData storage assetData = assets[nftId];
-            require(assetData.price > 0, "INVALID_PRICE");
-            require(assetData.owner != msg.sender, "CANT_BUY_YOUR_PRODCT");
+        AssetData storage assetData = assets[nftId];
+        require(assetData.price > 0, "INVALID_PRICE");
+        require(assetData.owner != msg.sender, "CANT_BUY_YOUR_PRODCT");
 
-            // Ensure payer has approved the contract to spend the amount
-            require(coin.allowance(msg.sender, address(this)) >= assetData.price, "INSUFFICIENT_ALLOWANCE");
+        // Ensure payer has approved the contract to spend the amount
+        require(coin.allowance(msg.sender, address(this)) >= assetData.price, "INSUFFICIENT_ALLOWANCE");
 
-            bool success = coin.transferFrom(msg.sender, address(this), assetData.price);
-            require(success, "TRANSFER_FAILED");
+        bool success = coin.transferFrom(msg.sender, address(this), assetData.price);
+        require(success, "TRANSFER_FAILED");
 
-            assetData.payedFor = true;
-            assetData.payer = msg.sender;
+        assetData.payedFor = true;
+        assetData.payer = msg.sender;
 
-            emit PaymentReceived(nftId, msg.sender, assetData.price);
-            return true;
+        emit PaymentReceived(nftId, msg.sender, assetData.price);
+        return true;
     }
-
 
     function mark_as_delivered(uint128 nftId, bool isPayer) external noReentrant {
         AssetData storage assetData = assets[nftId];
         require(assetData.payedFor, "NOT_PAYED_FOR");
-        if (isPayer){
+        if (isPayer) {
             require(assetData.payer == msg.sender, "NOT_PAYER");
             require(assetData.payerChecked == true, "ALREADY_CHECKED");
             assetData.payerChecked = true;
-            
-        }else{
+        } else {
             require(assetData.owner == msg.sender, "NOT_PAYER");
             require(assetData.buyerChecked == true, "ALREADY_CHECKED");
             assetData.buyerChecked = true;
-            
         }
         emit ItemDelivered(nftId, msg.sender, isPayer);
     }
 
-    function get_payment(uint128 nftId) external noReentrant  {
+    function get_payment(uint128 nftId) external noReentrant {
         AssetData storage assetData = assets[nftId];
         require(assetData.payedFor, "NOT_PAYED_FOR");
         require(assetData.owner == msg.sender, "NOT_OWNER");
         require(assetData.payerChecked, "PAYER_NOT_VERIFIED");
         require(assetData.buyerChecked, "SELLER_NOT_VERIFIED");
-        uint128 price = uint128((assetData.price * 9) / 10); 
-       
-          
+        uint128 price = uint128((assetData.price * 9) / 10);
+
         bool success = coin.transfer(msg.sender, price);
         require(success, "TRANSFER_FAILED");
         nft.safeTransferFrom(address(this), assetData.payer, nftId);
 
         delete assets[nftId];
         emit PaymentWithdrawn(nftId, msg.sender, price);
-
-        
     }
 
-    function get_user_listing(uint128 limit,address user) public view returns (uint128[] memory){
+    function get_user_listing(uint128 limit, address user) public view returns (uint128[] memory) {
         uint128[] memory ids = new uint128[](limit);
         uint step = 0;
-         for (uint128 i = 0 ; i < assetIds.length; i++) {
-           if(i >= limit){
+        for (uint128 i = 0; i < assetIds.length; i++) {
+            if (i >= limit) {
                 break;
             }
             AssetData storage assetData = assets[assetIds[i]];
-            if( assetData.owner == user){
+            if (assetData.owner == user) {
                 ids[step] = assetIds[i];
-                step ++;
+                step++;
             }
-            
         }
         return ids;
-
     }
-    function get_user_purchase(uint128 limit,address user) public view returns (uint128[] memory){
+    function get_user_purchase(uint128 limit, address user) public view returns (uint128[] memory) {
         uint128[] memory ids = new uint128[](limit);
         uint step = 0;
-         for (uint128 i = 0 ; i < assetIds.length; i++) {
-           if(i >= limit){
+        for (uint128 i = 0; i < assetIds.length; i++) {
+            if (i >= limit) {
                 break;
             }
             AssetData storage assetData = assets[assetIds[i]];
-            if( assetData.payer == user){
+            if (assetData.payer == user) {
                 ids[step] = assetIds[i];
-                step ++;
+                step++;
             }
-            
         }
         return ids;
-
     }
 
     function openDispute(uint128 nftId) external {
@@ -274,13 +245,12 @@ contract CropMarketplace {
         dispute.nftId = nftId;
         dispute.buyer = asset.payer;
         dispute.seller = asset.owner;
-        dispute.id = disputeIds.length -1;
+        dispute.id = disputeIds.length - 1;
         bool ispayer = asset.payer == msg.sender;
-        
 
-        emit DisputeOpened(nftId, msg.sender,ispayer );
+        emit DisputeOpened(nftId, msg.sender, ispayer);
     }
-     uint256 public constant RESOLUTION_PERIOD = 7 days;
+    uint256 public constant RESOLUTION_PERIOD = 7 days;
     mapping(uint128 => uint256) public disputeStartTime;
     mapping(uint128 => mapping(address => bool)) public hasVoted;
 
@@ -288,7 +258,6 @@ contract CropMarketplace {
         Dispute storage dispute = disputes[nftId];
         require(!dispute.resolved, "ALREADY_RESOLVED");
         require(!hasVoted[nftId][msg.sender], "ALREADY_VOTED");
-    
 
         dispute.votes[msg.sender] = voteForBuyer;
         dispute.resolvers.push(msg.sender);
@@ -301,45 +270,44 @@ contract CropMarketplace {
         emit DisputeVoted(nftId, msg.sender, voteForBuyer);
     }
 
-//     struct RewardHistory {
-//     uint256 timestamp;
-//     uint256 amount;
-//     uint128 disputeId;
-// }
+    //     struct RewardHistory {
+    //     uint256 timestamp;
+    //     uint256 amount;
+    //     uint128 disputeId;
+    // }
 
-// mapping(address => RewardHistory[]) public resolverRewardHistory;
+    // mapping(address => RewardHistory[]) public resolverRewardHistory;
 
-// function _addRewardHistory(address resolver, uint256 amount, uint128 disputeId) internal {
-//     resolverRewardHistory[resolver].push(RewardHistory({
-//         timestamp: block.timestamp,
-//         amount: amount,
-//         disputeId: disputeId
-//     }));
-// }
-   
+    // function _addRewardHistory(address resolver, uint256 amount, uint128 disputeId) internal {
+    //     resolverRewardHistory[resolver].push(RewardHistory({
+    //         timestamp: block.timestamp,
+    //         amount: amount,
+    //         disputeId: disputeId
+    //     }));
+    // }
 
     function resolveDispute(uint128 nftId) external {
         Dispute storage dispute = disputes[nftId];
         require(!dispute.resolved, "ALREADY_RESOLVED");
         require(dispute.resolvers.length >= minResolvers, "NOT_ENOUGH_REOLVERS");
 
-         require(block.timestamp <= disputeStartTime[nftId] + RESOLUTION_PERIOD, "RESOLUTION_PERIOD_EXPIRED");
-         require(dispute.buyerVotes + dispute.sellerVotes >= minResolvers, "NOT_ENOUGH_VOTES");
+        require(block.timestamp <= disputeStartTime[nftId] + RESOLUTION_PERIOD, "RESOLUTION_PERIOD_EXPIRED");
+        require(dispute.buyerVotes + dispute.sellerVotes >= minResolvers, "NOT_ENOUGH_VOTES");
 
-        uint128 refund_or_payment = (assets[nftId].price * 9) /10;
+        uint128 refund_or_payment = (assets[nftId].price * 9) / 10;
         uint128 totalRewardForResolvers = assets[nftId].price - refund_or_payment;
 
         bool buyerwins = dispute.buyerVotes > dispute.sellerVotes;
         if (buyerwins) {
             // Refund buyer
             bool success = coin.transferFrom(address(this), dispute.buyer, assets[nftId].price);
-            
+
             require(success, "REFUND_FAILED");
             totalMarketToken -= assets[nftId].price;
         } else {
             // Release payment to seller
             bool success = coin.transferFrom(address(this), dispute.seller, assets[nftId].price);
-            
+
             require(success, "PAYMENT_FAILED");
             totalMarketToken -= assets[nftId].price;
         }
@@ -368,8 +336,6 @@ contract CropMarketplace {
         emit DisputeResolved(nftId, dispute.buyerVotes > dispute.sellerVotes);
     }
 
-    
-
     function registerResolver() external {
         uint256 allowance = governanceToken.allowance(msg.sender, address(this));
 
@@ -393,12 +359,12 @@ contract CropMarketplace {
     function rewardResolver(address resolver, uint128 amount) internal {
         require(resolver != address(0), "NOT_RESOLVER");
         require(isResolver[resolver], "NOT_RESOLVER");
-       
+
         resolverReward[resolver] += amount;
     }
 
-     event ResolverRewardClaimed(address indexed resolver, uint256 amount);
-    
+    event ResolverRewardClaimed(address indexed resolver, uint256 amount);
+
     // Add function to check available resolver reward
     function getAvailableResolverReward(address resolver) public view returns (uint128) {
         return resolverReward[resolver];
@@ -408,37 +374,42 @@ contract CropMarketplace {
         require(isResolver[msg.sender], "NOT_RESOLVER");
         uint128 reward = resolverReward[msg.sender];
         require(reward > 0, "NO_REWARD_AVAILABLE");
-        
+
         // Reset reward before transfer to prevent reentrancy
         resolverReward[msg.sender] = 0;
-        
+
         // Transfer reward
         bool success = coin.transfer(msg.sender, reward);
         require(success, "TRANSFER_FAILED");
-        
+
         emit ResolverRewardClaimed(msg.sender, reward);
     }
 
-    function getAllDisputes() external view returns (uint128[] memory){
+    function getAllDisputes() external view returns (uint128[] memory) {
         return disputeIds;
     }
 
-    function getDisputeData(uint128 nftId) external view returns (uint256 , uint128, address ,address, bool, uint128, uint128){
+    function getDisputeData(
+        uint128 nftId
+    ) external view returns (uint256, uint128, address, address, bool, uint128, uint128) {
         Dispute storage dispute = disputes[nftId];
-        return (dispute.id, dispute.nftId, dispute.buyer, dispute.seller, dispute.resolved, dispute.buyerVotes, dispute.sellerVotes);
+        return (
+            dispute.id,
+            dispute.nftId,
+            dispute.buyer,
+            dispute.seller,
+            dispute.resolved,
+            dispute.buyerVotes,
+            dispute.sellerVotes
+        );
     }
 
-    function getTotalGovernanceToken() external view onlyOwner returns (uint256){
+    function getTotalGovernanceToken() external view onlyOwner returns (uint256) {
         return totalGovernanceToken;
     }
-    function getTotaltotalMarketToken() external view onlyOwner returns (uint256){
+    function getTotaltotalMarketToken() external view onlyOwner returns (uint256) {
         return totalMarketToken;
     }
 
-
-    
-
-    
-    
     receive() external payable {}
 }

@@ -44,23 +44,22 @@ const deployAgriMarketplace: DeployFunction = async function (hre: HardhatRuntim
   const AgriCoin = await hre.ethers.getContract<Contract>("CropCoin", deployer);
   const AgriNft = await hre.ethers.getContract<Contract>("CropNft", deployer);
 
-  const coinAddr = await AgriCoin.getAddress()
-  const nftAddr = await AgriNft.getAddress()
+  const coinAddr = await AgriCoin.getAddress();
+  const nftAddr = await AgriNft.getAddress();
 
   await deploy("CropMarketplace", {
     from: deployer,
     // Contract constructor arguments
-    args: [nftAddr, coinAddr,  coinAddr],
+    args: [nftAddr, coinAddr, coinAddr],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
 
-
   // Get the deployed contract to interact with it after deploying.
   const AgriMarketplace = await hre.ethers.getContract<Contract>("CropMarketplace", deployer);
-  console.log("👋 Initial greeting:", await AgriMarketplace.get_listings(0,9));
+  console.log("👋 Initial greeting:", await AgriMarketplace.get_listings(0, 9));
 
   // console.log("👋 Initial greeting:", await AgriCoin.approve(nftAddr, 100000000000) );
 };
@@ -69,4 +68,4 @@ export default deployAgriMarketplace;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags AgriMarketplace
-deployAgriMarketplace.tags = ["CropMarketplace","CropCoin", "CropNft"];
+deployAgriMarketplace.tags = ["CropMarketplace", "CropCoin", "CropNft"];

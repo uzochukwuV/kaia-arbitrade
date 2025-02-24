@@ -4,20 +4,16 @@ pragma solidity >=0.8.0 <0.9.0;
 // Useful for debugging. Remove when deploying to a live network.
 import "hardhat/console.sol";
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { ERC721Burnable } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import { ERC721URIStorage } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract CropNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     uint256 private _nextTokenId = 1;
-    mapping (address => uint) owners;
+    mapping(address => uint) owners;
 
-    constructor (address initialOwner)
-        ERC721("CropNft", "Cnt")
-        Ownable(initialOwner)
-    {}
+    constructor(address initialOwner) ERC721("CropNft", "Cnt") Ownable(initialOwner) {}
 
     function safeMint(address to, string memory uri) public {
         uint256 tokenId = _nextTokenId++;
@@ -25,7 +21,7 @@ contract CropNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         _setTokenURI(tokenId, uri);
     }
 
-    function getAllUserNFT(address user) public view returns ( uint[] memory){
+    function getAllUserNFT(address user) public view returns (uint[] memory) {
         uint balance = balanceOf(user);
         uint[] memory tokens = new uint[](balance);
         uint counter = 0;
@@ -40,21 +36,11 @@ contract CropNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     // The following functions are overrides required by Solidity.
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (bool)
-    {
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721URIStorage) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }

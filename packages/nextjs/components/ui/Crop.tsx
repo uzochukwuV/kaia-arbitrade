@@ -1,42 +1,36 @@
-"use client"
-import { useQuery } from '@tanstack/react-query';
+"use client";
 
-import Image from 'next/image';
-import { useEffect, useState } from 'react'
-import { LoaderIcon } from 'react-hot-toast';
-
-import { parseEther } from 'viem';
-
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { LoaderIcon } from "react-hot-toast";
+import { parseEther } from "viem";
 import DeployedContracts from "~~/contracts/deployedContracts";
-import { useScaffoldReadContract, useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
-import { NFTMetaData } from '~~/types/nft';
-
-
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { NFTMetaData } from "~~/types/nft";
 
 export function Crop({ id }: { id: bigint }) {
-  const [nft, setNFt] = useState<NFTMetaData | null>()
+  const [nft, setNFt] = useState<NFTMetaData | null>();
   const { data: connectedAddressNFT, isLoading: isConnectedAddressCounterLoading } = useScaffoldReadContract({
     contractName: "CropNft",
     functionName: "tokenURI",
     args: [BigInt(id)],
-  })
+  });
   const [price, setPrice] = useState("0.2");
 
-  const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT! })
+  const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT! });
 
   useEffect(() => {
     if (connectedAddressNFT && !nft) {
-      refetch()
-
+      refetch();
     }
-    console.log(nftData)
+    console.log(nftData);
     if (nftData?.error) {
-      refetch()
+      refetch();
     }
     if (nftData?.data) {
-      setNFt(nftData?.data?.data)
+      setNFt(nftData?.data?.data);
     }
-
   }, [isConnectedAddressCounterLoading, isLoading, connectedAddressNFT, nft]);
   const { writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
   const { writeContractAsync: Approve } = useScaffoldWriteContract({ contractName: "CropNft" });
@@ -74,13 +68,11 @@ export function Crop({ id }: { id: bigint }) {
       console.error("Error setting greeting", e);
     }
 
-
     try {
       await writeContractAsync(
         {
           functionName: "list_for_sale",
           args: [id, parseEther(price)],
-
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -93,23 +85,27 @@ export function Crop({ id }: { id: bigint }) {
     }
   };
 
-
-
-
   if (isConnectedAddressCounterLoading || isLoading) {
-    return <LoaderIcon />
+    return <LoaderIcon />;
   }
-
 
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
       <div className="aspect-square relative bg-muted">
-        <Image src={nft?.image!} alt='' width={100} height={100} className=' h-full w-full top-0 bottom-0 rounded-md  bg-cover bg-center absolute' />
+        <Image
+          src={nft?.image!}
+          alt=""
+          width={100}
+          height={100}
+          className=" h-full w-full top-0 bottom-0 rounded-md  bg-cover bg-center absolute"
+        />
       </div>
       <div className="p-4 flex justify-end flex-col">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1">
-            <h3 className="font-semibold">{nft?.name || "NFT Name"} #{id.toString()}</h3>
+            <h3 className="font-semibold">
+              {nft?.name || "NFT Name"} #{id.toString()}
+            </h3>
             <p className="text-sm text-muted-foreground">{nft?.description || "NFT Description"}</p>
           </div>
           {/* <button
@@ -127,24 +123,33 @@ export function Crop({ id }: { id: bigint }) {
         <div className="mt-4 flex items-center gap-2"></div>
       </div>
       <div className="flex items-center p-4 pt-0">
-        <div onClick={handleListSale} className="flex cursor-pointer  bg-green-300 py-2 px-6 rounded items-center gap-2 text-sm text-muted-foreground"><svg
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin='round'
-          strokeWidth="round" className="lucide lucide-package h-4 w-4">
-          <path d="m7.5 4.27 9 5.15"></path>
-          <path
-            d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
-          </path>
-          <path d="m3.3 7 8.7 5 8.7-5"></path>
-          <path d="M12 22V12"></path>
-        </svg>List for Sale</div>
+        <div
+          onClick={handleListSale}
+          className="flex cursor-pointer  bg-green-300 py-2 px-6 rounded items-center gap-2 text-sm text-muted-foreground"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="round"
+            className="lucide lucide-package h-4 w-4"
+          >
+            <path d="m7.5 4.27 9 5.15"></path>
+            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+            <path d="m3.3 7 8.7 5 8.7-5"></path>
+            <path d="M12 22V12"></path>
+          </svg>
+          List for Sale
+        </div>
       </div>
     </div>
-
-
-  )
+  );
 }
-
 
 export function useNFT({ id }: { id: string }) {
   return useQuery({
@@ -153,9 +158,9 @@ export function useNFT({ id }: { id: string }) {
       if (!id) return;
       const response = await fetch("api/nft", {
         method: "POST",
-        body: JSON.stringify({ id })
-      })
-      return await response.json()
+        body: JSON.stringify({ id }),
+      });
+      return await response.json();
     },
-  })
+  });
 }

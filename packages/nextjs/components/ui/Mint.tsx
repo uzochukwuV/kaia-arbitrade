@@ -1,32 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useAccount } from "wagmi"
-
-import { useTransactor } from "~~/hooks/scaffold-eth"
+import { useState } from "react";
+import toast, { LoaderIcon } from "react-hot-toast";
+import { useAccount } from "wagmi";
 import { useWriteContract } from "wagmi";
 import DeployedContracts from "~~/contracts/deployedContracts";
-import toast, { LoaderIcon } from "react-hot-toast";
-
-
-
+import { useTransactor } from "~~/hooks/scaffold-eth";
 
 export default function NFTMintingForm() {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [quantity, setQuantity] = useState("")
-  const [havestDate, setHavestDate] = useState("")
-  const [tags, setTags] = useState("")
-  const [image, setImage] = useState<File | null>(null)
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [havestDate, setHavestDate] = useState("");
+  const [tags, setTags] = useState("");
+  const [image, setImage] = useState<File | null>(null);
 
   const [uploading, setUploading] = useState(false);
 
   const { address: connectedAddress } = useAccount();
   const writeTxn = useTransactor();
-
-
-
-
 
   const { writeContractAsync } = useWriteContract();
 
@@ -49,25 +41,24 @@ export default function NFTMintingForm() {
         method: "POST",
         body: data,
       });
-      const ipfsUrl = await uploadRequest.json()
-
+      const ipfsUrl = await uploadRequest.json();
 
       setUploading(false);
-      return ipfsUrl.jsonurl
+      return ipfsUrl.jsonurl;
     } catch (e) {
       console.log(e);
       setUploading(false);
       alert("Trouble uploading file");
-      return ""
+      return "";
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     let url = await createListNFT();
 
     if (url == "") {
-      toast("Unable to Stage Image, check your internet connection")
+      toast("Unable to Stage Image, check your internet connection");
       return;
     }
     if (writeContractAsync) {
@@ -80,16 +71,14 @@ export default function NFTMintingForm() {
             args: [connectedAddress!, url],
           });
         await writeTxn(makeWriteWithParams);
-
       } catch (e: any) {
         console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
       }
     }
-  }
-
+  };
 
   return (
-    <div className="w-full max-w-2xl  p-8 backdrop-blur-xl  bg-slate-100 my-9 " >
+    <div className="w-full max-w-2xl  p-8 backdrop-blur-xl  bg-slate-100 my-9 ">
       <h1 className="text-3xl font-bold text-[#222] mb-6 text-center">Mint Your Stock NFT</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -100,7 +89,7 @@ export default function NFTMintingForm() {
             type="text"
             id="name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Enter NFT name"
             required
@@ -113,7 +102,7 @@ export default function NFTMintingForm() {
           <textarea
             id="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={e => setDescription(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Enter NFT description"
             rows={3}
@@ -127,7 +116,7 @@ export default function NFTMintingForm() {
           <input
             id="Quantity"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={e => setQuantity(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Enter NFT Quantity"
             type="number"
@@ -141,7 +130,7 @@ export default function NFTMintingForm() {
           <input
             id="tags"
             value={tags}
-            onChange={(e) => setTags(e.target.value)}
+            onChange={e => setTags(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Enter NFT Tag seperated by comma"
             type="text"
@@ -155,7 +144,7 @@ export default function NFTMintingForm() {
           <input
             id="havestDate"
             value={havestDate}
-            onChange={(e) => setHavestDate(e.target.value)}
+            onChange={e => setHavestDate(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Enter NFT havestDate"
             type="date"
@@ -170,8 +159,7 @@ export default function NFTMintingForm() {
             <input
               type="file"
               id="image"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
-
+              onChange={e => setImage(e.target.files?.[0] || null)}
               className="hidden"
               accept="image/*"
               required
@@ -180,7 +168,6 @@ export default function NFTMintingForm() {
               htmlFor="image"
               className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 flex items-center justify-center cursor-pointer"
             >
-
               {image ? image.name : "Upload Image"}
             </label>
           </div>
@@ -195,6 +182,5 @@ export default function NFTMintingForm() {
         </button>
       </form>
     </div>
-  )
+  );
 }
-

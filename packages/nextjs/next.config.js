@@ -17,11 +17,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'lavender-far-earwig-569.mypinata.cloud',
-        port: '',
-        pathname: '/**',
-        search: '',
+        protocol: "https",
+        hostname: "lavender-far-earwig-569.mypinata.cloud",
+        port: "",
+        pathname: "/**",
+        search: "",
       },
     ],
   },

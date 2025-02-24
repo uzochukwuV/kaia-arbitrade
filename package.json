@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.9",
+    "react-hot-toast": "^2.5.2",
     "viem": "2.x",
     "wagmi": "^2.14.11"
   }
