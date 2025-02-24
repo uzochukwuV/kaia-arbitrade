@@ -93,7 +93,7 @@ export function Crop({ id }: { id: bigint }) {
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
       <div className="aspect-square relative bg-muted">
         <Image
-          src={nft?.image!}
+          src={nft?.image || ""}
           alt=""
           width={100}
           height={100}
