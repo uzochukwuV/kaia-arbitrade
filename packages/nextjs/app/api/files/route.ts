@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const tags: string | undefined = data.get("tags")?.toString();
     const description: string | undefined = data.get("description")?.toString();
     if (!name || !description) {
-      throw new Error(`No name or description ${data.values().toArray().join("")}`);
+      throw new Error(`No name or description `);
     }
     const file: File | null = data.get("file") as unknown as File;
     const uploadData = await pinata.upload.file(file).addMetadata({

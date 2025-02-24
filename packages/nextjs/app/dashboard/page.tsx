@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNFTData } from "../explore/page";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
+import { useNFTData } from "~~/components/ui/NFTdata";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { NFTCardProps } from "~~/types/nft";
 
