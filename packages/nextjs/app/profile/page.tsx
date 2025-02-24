@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { NFTState } from "../explore/page";
+
 import { LoaderIcon } from "react-hot-toast";
 import { useAccount } from "wagmi";
 import { Crop } from "~~/components/ui/Crop";
+import { NFTState } from "~~/components/ui/NFTState";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
