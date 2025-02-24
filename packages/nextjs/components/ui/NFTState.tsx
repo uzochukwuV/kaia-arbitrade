@@ -1,7 +1,9 @@
+"use client"
 import { useEffect, useState } from "react";
-import { useNFTData } from "~~/app/explore/page";
+
 import { NFTCardProps } from "~~/types/nft";
 import NFTCard from "./NFTCard";
+import { useNFTData } from "./NFTdata";
 
 export function NFTState({ id }: { id: string }) {
   const [nft, setNFt] = useState<NFTCardProps | null>(null);
