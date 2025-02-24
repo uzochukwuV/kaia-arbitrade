@@ -4,12 +4,9 @@ import { FC, useEffect, useState } from "react";
 import { LoaderIcon } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
-
 import NFTCard from "~~/components/ui/NFTCard";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { NFTCardProps, NFTMetaData } from "~~/types/nft";
-
-
 import DeployedContracts from "~~/contracts/deployedContracts";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
@@ -32,7 +29,8 @@ export default function ExplorePage() {
                             <p className="text-muted-foreground">Discover and trade agricultural products</p>
                         </div>
                         <div className="flex items-center gap-2"><button
-                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground h-10 w-10 bg-accent"><svg
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground h-10 w-10 bg-accent">
+                            <svg
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                                 className="lucide lucide-grid2x2 h-4 w-4">
@@ -40,7 +38,8 @@ export default function ExplorePage() {
                                 <path d="M3 12h18"></path>
                                 <path d="M12 3v18"></path>
                             </svg></button><button
-                                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10"><svg
+                                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                                <svg
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                                     className="lucide lucide-list h-4 w-4">
@@ -53,28 +52,33 @@ export default function ExplorePage() {
                                 </svg></button><button
                                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 md:hidden"
                                     type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r0:"
-                                    data-state="closed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                        strokeLinejoin="round" className="lucide lucide-filter h-4 w-4 mr-2">
+                                    data-state="closed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                    strokeLinejoin="round" className="lucide lucide-filter h-4 w-4 mr-2">
                                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                                 </svg>Filters</button></div>
                     </div>
                     <div className="flex flex-col gap-4 md:flex-row md:items-center mb-8">
-                        <div className="relative flex-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-search absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </svg><input
+                        <div className="relative flex-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="lucide lucide-search absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.3-4.3"></path>
+                            </svg><input
                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                                 placeholder="Search products..." /></div><button type="button" role="combobox"
                                     aria-controls="radix-:r5:" aria-expanded="false" aria-autocomplete="none" dir="ltr" data-state="closed"
-                                    className="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 w-[180px]"><span
-                                    >Latest Listed</span><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                        strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down h-4 w-4 opacity-50"
-                                        aria-hidden="true">
+                                    className="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 w-[180px]">
+                            <span
+                            >Latest Listed
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down h-4 w-4 opacity-50"
+                                aria-hidden="true">
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg></button>
                     </div>
@@ -82,20 +86,35 @@ export default function ExplorePage() {
                         <div className="hidden md:block">
                             <div className="space-y-6">
                                 <div className="space-y-4">
-                                    <div className="font-semibold">Price Range</div><span dir="ltr" data-orientation="horizontal"
+                                    <div className="font-semibold">Price Range</div>
+                                    <span dir="ltr" data-orientation="horizontal"
                                         aria-disabled="false" className="relative flex touch-none select-none items-center w-full"
-                                    ><span
-                                        data-orientation="horizontal"
-                                        className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary"><span
-                                            data-orientation="horizontal" className="absolute left-0 right-0 h-full bg-primary"
-                                        ></span></span><span
+                                    >
+                                        <span
+                                            data-orientation="horizontal"
+                                            className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
+                                            <span
+                                                data-orientation="horizontal" className="absolute left-0 right-0 h-full bg-primary"
+                                            >
+                                            </span>
+                                        </span>
+                                        <span
                                             className=" -translate-x-[50%] absolute left-0"
-                                        ><span
-                                            role="slider" tabIndex={0}
-                                            className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                                        >
+                                            <span
+                                                role="slider" tabIndex={0}
+                                                className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
 
-                                        ></span></span></span>
-                                    <div className="flex items-center justify-between text-sm"><span>$0</span><span>$1000</span></div>
+                                            >
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span>$0
+
+                                        </span>
+                                        <span>$1000
+                                        </span></div>
                                 </div>
                                 <div data-orientation="horizontal" role="none" className="shrink-0 bg-border h-[1px] w-full"></div>
                                 <div className="space-y-4">
@@ -106,37 +125,66 @@ export default function ExplorePage() {
                                         <div data-radix-scroll-area-viewport="" className="h-full overflow-x-hidden overflow-y-scroll w-full rounded-[inherit]"
                                         >
                                             <div className=" min-h-[100%] table" >
-                                                <div className="space-y-2"><label
-                                                    className="flex items-center space-x-2 cursor-pointer"><button type="button"
-                                                        role="checkbox" aria-checked="false" data-state="unchecked" value="on"
-                                                        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                        id="Grains &amp; Cereals"></button><span className="text-sm">Grains &amp;
-                                                            Cereals</span></label><label
-                                                                className="flex items-center space-x-2 cursor-pointer"><button type="button"
-                                                                    role="checkbox" aria-checked="false" data-state="unchecked" value="on"
-                                                                    className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                    id="Fruits &amp; Vegetables"></button><span className="text-sm">Fruits &amp;
-                                                                        Vegetables</span></label><label
-                                                                            className="flex items-center space-x-2 cursor-pointer"><button type="button"
-                                                                                role="checkbox" aria-checked="false" data-state="unchecked" value="on"
-                                                                                className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                                id="Livestock &amp; Dairy"></button><span className="text-sm">Livestock
-                                                                                    &amp; Dairy</span></label><label
-                                                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
-                                                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
-                                                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                                            id="Seeds &amp; Seedlings"></button><span className="text-sm">Seeds &amp;
-                                                                                                Seedlings</span></label><label
-                                                                                                    className="flex items-center space-x-2 cursor-pointer"><button type="button"
-                                                                                                        role="checkbox" aria-checked="false" data-state="unchecked" value="on"
-                                                                                                        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                                                        id="Organic Produce"></button><span className="text-sm">Organic
-                                                                                                            Produce</span></label><label
-                                                                                                                className="flex items-center space-x-2 cursor-pointer"><button type="button"
-                                                                                                                    role="checkbox" aria-checked="false" data-state="unchecked" value="on"
-                                                                                                                    className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                                                                    id="Specialty Crops"></button><span className="text-sm">Specialty
-                                                                                                                        Crops</span></label></div>
+                                                <div className="space-y-2">
+                                                    <label
+                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
+                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                            id="Grains &amp; Cereals">
+
+                                                        </button>
+                                                        <span className="text-sm">Grains &amp;
+                                                            Cereals
+
+                                                        </span>
+
+                                                    </label>
+                                                    <label
+                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
+                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                            id="Fruits &amp; Vegetables"></button>
+                                                        <span className="text-sm">Fruits &amp;
+                                                            Vegetables
+                                                        </span>
+
+                                                    </label><label
+                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
+                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                            id="Livestock &amp; Dairy"></button>
+                                                        <span className="text-sm">Livestock
+                                                            &amp; Dairy
+                                                        </span>
+
+                                                    </label><label
+                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
+                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                            id="Seeds &amp; Seedlings"></button>
+                                                        <span className="text-sm">Seeds &amp;
+                                                            Seedlings
+
+                                                        </span>
+                                                    </label>
+                                                    <label
+                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
+                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                            id="Organic Produce"></button>
+                                                        <span className="text-sm">Organic
+                                                            Produce
+                                                        </span>
+
+                                                    </label><label
+                                                        className="flex items-center space-x-2 cursor-pointer"><button type="button"
+                                                            role="checkbox" aria-checked="false" data-state="unchecked" value="on"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                            id="Specialty Crops"></button>
+                                                        <span className="text-sm">Specialty
+                                                            Crops
+                                                        </span>
+                                                    </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -147,23 +195,38 @@ export default function ExplorePage() {
                                     <div className="space-y-2"><label className="flex items-center space-x-2 cursor-pointer"><button
                                         type="button" role="checkbox" aria-checked="false" data-state="unchecked" value="on"
                                         className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                        id="Organic"></button><span className="text-sm">Organic</span></label><label
+                                        id="Organic"></button>
+                                        <span className="text-sm">Organic
+                                        </span>
+                                    </label><label
+                                        className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
+                                            aria-checked="false" data-state="unchecked" value="on"
+                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                            id="Fair Trade"></button>
+                                            <span className="text-sm">Fair Trade
+                                            </span>
+                                        </label><label
                                             className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
                                                 aria-checked="false" data-state="unchecked" value="on"
                                                 className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                id="Fair Trade"></button><span className="text-sm">Fair Trade</span></label><label
-                                                    className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
-                                                        aria-checked="false" data-state="unchecked" value="on"
-                                                        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                        id="Non-GMO"></button><span className="text-sm">Non-GMO</span></label><label
-                                                            className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
-                                                                aria-checked="false" data-state="unchecked" value="on"
-                                                                className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                id="Kosher"></button><span className="text-sm">Kosher</span></label><label
-                                                                    className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
-                                                                        aria-checked="false" data-state="unchecked" value="on"
-                                                                        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                                        id="Halal"></button><span className="text-sm">Halal</span></label></div>
+                                                id="Non-GMO"></button>
+                                            <span className="text-sm">Non-GMO
+                                            </span>
+                                        </label><label
+                                            className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
+                                                aria-checked="false" data-state="unchecked" value="on"
+                                                className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                id="Kosher"></button>
+                                            <span className="text-sm">Kosher
+                                            </span>
+                                        </label><label
+                                            className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
+                                                aria-checked="false" data-state="unchecked" value="on"
+                                                className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                                id="Halal"></button>
+                                            <span className="text-sm">Halal
+                                            </span>
+                                        </label></div>
                                 </div>
                                 <div data-orientation="horizontal" role="none" className="shrink-0 bg-border h-[1px] w-full"></div>
                                 <div className="space-y-4">
@@ -171,22 +234,32 @@ export default function ExplorePage() {
                                     <div className="space-y-2"><label className="flex items-center space-x-2 cursor-pointer"><button
                                         type="button" role="checkbox" aria-checked="false" data-state="unchecked" value="on"
                                         className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                        id="Premium"></button><span className="text-sm">Premium</span></label><label
+                                        id="Premium"></button>
+                                        <span className="text-sm">Premium
+                                        </span>
+                                    </label><label
+                                        className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
+                                            aria-checked="false" data-state="unchecked" value="on"
+                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                            id="Standard"></button>
+                                            <span className="text-sm">Standard
+                                            </span>
+                                        </label><label
                                             className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
                                                 aria-checked="false" data-state="unchecked" value="on"
                                                 className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                id="Standard"></button><span className="text-sm">Standard</span></label><label
-                                                    className="flex items-center space-x-2 cursor-pointer"><button type="button" role="checkbox"
-                                                        aria-checked="false" data-state="unchecked" value="on"
-                                                        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                                        id="Economy"></button><span className="text-sm">Economy</span></label></div>
+                                                id="Economy"></button>
+                                            <span className="text-sm">Economy
+                                            </span>
+                                        </label></div>
                                 </div>
                             </div>
                         </div>
                         <div className="space-y-6">
                             <div className="flex flex-wrap gap-2">
                                 <div className="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 flex items-center gap-1"
-                                    data-v0-t="badge">Price: $0 - $1000<svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                    data-v0-t="badge">Price: $0 - $1000
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                         height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                         strokeLinecap="round" strokeLinejoin="round"
                                         className="lucide lucide-x h-3 w-3 cursor-pointer">
@@ -194,7 +267,8 @@ export default function ExplorePage() {
                                         <path d="m6 6 12 12"></path>
                                     </svg></div>
                                 <div className="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 flex items-center gap-1"
-                                    data-v0-t="badge">Organic<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    data-v0-t="badge">Organic
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                         strokeLinecap="round" strokeLinejoin="round"
                                         className="lucide lucide-x h-3 w-3 cursor-pointer">
@@ -202,7 +276,8 @@ export default function ExplorePage() {
                                         <path d="m6 6 12 12"></path>
                                     </svg></div>
                                 <div className="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 flex items-center gap-1"
-                                    data-v0-t="badge">Premium<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    data-v0-t="badge">Premium
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                         strokeLinecap="round" strokeLinejoin="round"
                                         className="lucide lucide-x h-3 w-3 cursor-pointer">
@@ -261,7 +336,8 @@ export default function ExplorePage() {
                                 </div>
                             </div>
                             <div className="items-center p-4 pt-0 flex justify-between">
-                                <div className="flex items-center text-sm text-muted-foreground"><svg
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                <svg
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -302,7 +378,8 @@ export default function ExplorePage() {
                                 </div>
                             </div>
                             <div className="items-center p-4 pt-0 flex justify-between">
-                                <div className="flex items-center text-sm text-muted-foreground"><svg
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                <svg
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -539,6 +616,7 @@ const MarketNFTCARD: FC<NFTCardProps> = ({
                 </div>
                 <div className="items-center p-4 pt-0 flex justify-between">
                     <div className="flex items-center text-sm text-muted-foreground">
+
                         <svg
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"

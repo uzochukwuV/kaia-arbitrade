@@ -2,8 +2,7 @@
 
 import type { NextPage } from "next";
 
-import Hero from "~~/components/ui/Hero";
-import CropSale from "~~/components/ui/CropSale";
+
 import FootBar from "~~/components/ui/FootBar";
 import Link from "next/link";
 

@@ -2,17 +2,15 @@
 import { useQuery } from '@tanstack/react-query';
 
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LoaderIcon } from 'react-hot-toast';
 
 import { parseEther } from 'viem';
-import { useAccount } from 'wagmi'
 
-import NFTMintingForm from '~~/components/ui/Mint';
 import DeployedContracts from "~~/contracts/deployedContracts";
-import { useScaffoldReadContract, useScaffoldWriteContract, useTargetNetwork } from '~~/hooks/scaffold-eth';
+import { useScaffoldReadContract, useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
 import { NFTMetaData } from '~~/types/nft';
-import { getParsedError, notification } from '~~/utils/scaffold-eth';
+
 
 
 export function Crop({ id }: { id: bigint }) {
@@ -22,7 +20,6 @@ export function Crop({ id }: { id: bigint }) {
     functionName: "tokenURI",
     args: [BigInt(id)],
   })
-  const { address: userAddress } = useAccount();
   const [price, setPrice] = useState("0.2");
 
   const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT! })
@@ -133,7 +130,7 @@ export function Crop({ id }: { id: bigint }) {
         <div onClick={handleListSale} className="flex cursor-pointer  bg-green-300 py-2 px-6 rounded items-center gap-2 text-sm text-muted-foreground"><svg
           xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin='round'
-          stroke-linejoin="round" className="lucide lucide-package h-4 w-4">
+          strokeWidth="round" className="lucide lucide-package h-4 w-4">
           <path d="m7.5 4.27 9 5.15"></path>
           <path
             d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">

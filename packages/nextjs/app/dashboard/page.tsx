@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useEffect, useState, useTransition } from 'react'
-import { useAccount } from 'wagmi'
-import { useScaffoldReadContract, useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
-import { NFTCardProps } from '~~/types/nft'
-import { useNFTData } from '../explore/page'
-import { formatEther } from 'viem'
+import { useEffect, useState } from "react"
+import { useAccount } from "wagmi"
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth"
+import { NFTCardProps } from "~~/types/nft"
+import { useNFTData } from "../explore/page"
+import { formatEther } from "viem"
 
 export default function Dashboard() {
     enum TabState {
@@ -21,14 +21,14 @@ export default function Dashboard() {
         functionName: "get_user_listing",
         args: [BigInt(10), userAddress],
     })
-    
+
 
     const { data: purchase, isFetching } = useScaffoldReadContract({
         contractName: "CropMarketplace",
         functionName: "get_user_purchase",
         args: [BigInt(10), userAddress],
     })
-    
+
     return (
         <div>
             <div className="container mx-auto p-6">
@@ -41,7 +41,7 @@ export default function Dashboard() {
                         <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                             <h3 className="tracking-tight text-sm font-medium">Active Listings</h3><svg
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                                 className="lucide lucide-store h-4 w-4 text-muted-foreground">
                                 <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
                                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
@@ -59,8 +59,8 @@ export default function Dashboard() {
                     <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
                         <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                             <h3 className="tracking-tight text-sm font-medium">Pending Sales</h3><svg xmlns="http://www.w3.org/2000/svg"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                strokeLinecap="round" strokeLinejoin="round"
                                 className="lucide lucide-package h-4 w-4 text-muted-foreground">
                                 <path d="m7.5 4.27 9 5.15"></path>
                                 <path
@@ -78,7 +78,7 @@ export default function Dashboard() {
                         <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                             <h3 className="tracking-tight text-sm font-medium">Active Purchases</h3><svg
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                                 className="lucide lucide-shopping-cart h-4 w-4 text-muted-foreground">
                                 <circle cx="8" cy="21" r="1"></circle>
                                 <circle cx="19" cy="21" r="1"></circle>
@@ -92,8 +92,8 @@ export default function Dashboard() {
                     <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
                         <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                             <h3 className="tracking-tight text-sm font-medium">Open Disputes</h3><svg xmlns="http://www.w3.org/2000/svg"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                strokeLinecap="round" strokeLinejoin="round"
                                 className="lucide lucide-circle-alert h-4 w-4 text-muted-foreground">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" x2="12" y1="8" y2="12"></line>
@@ -130,7 +130,7 @@ export default function Dashboard() {
                         // 
                     }
                     {
-                        tab === TabState.Listings ? <ActiveListing data={trade} isLoading={tradeLoading} />  : <Purchases data={purchase} isLoading={isFetching} />
+                        tab === TabState.Listings ? <ActiveListing data={trade} isLoading={tradeLoading} /> : <Purchases data={purchase} isLoading={isFetching} />
                     }
                 </div>
             </div>
@@ -140,8 +140,8 @@ export default function Dashboard() {
 
 
 
-function Purchases({data, isLoading}:{data: readonly  BigInt[]| undefined, isLoading:boolean}) {
-    
+function Purchases({ data, isLoading }: { data: readonly BigInt[] | undefined, isLoading: boolean }) {
+
     return (
         <div>
             <div data-state="active" role="tabpanel" aria-labelledby="radix-:r0:-trigger-purchases"
@@ -172,7 +172,7 @@ function Purchases({data, isLoading}:{data: readonly  BigInt[]| undefined, isLoa
                                     </tr>
                                 </thead>
                                 <tbody className="[&amp;_tr:last-child]:border-0">
-                                {!isLoading &&
+                                    {!isLoading &&
                                         data?.map((i) => {
                                             if (i == BigInt(0)) {
                                                 return ""
@@ -194,30 +194,30 @@ function Purchases({data, isLoading}:{data: readonly  BigInt[]| undefined, isLoa
 function PurchaseNFts({ id }: { id: string }) {
     const [nft, setNFt] = useState<NFTCardProps | null>(null)
     const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
-    const {address} = useAccount()
+    const { address } = useAccount()
     const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
 
 
-   const handleopenDispute = async () => {
-       if (writeContractAsync) {
-           try {
-               await writeContractAsync(
-                   {
-                       functionName: "openDispute",
-                       args: [BigInt(id)],
-                   },
-                   {
-                       onBlockConfirmation: txnReceipt => {
-                           console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-                       },
-                   },
-               );
+    const handleopenDispute = async () => {
+        if (writeContractAsync) {
+            try {
+                await writeContractAsync(
+                    {
+                        functionName: "openDispute",
+                        args: [BigInt(id)],
+                    },
+                    {
+                        onBlockConfirmation: txnReceipt => {
+                            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+                        },
+                    },
+                );
 
-           } catch (e: any) {
-               console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
-           }
-       }
-   }
+            } catch (e: any) {
+                console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+            }
+        }
+    }
 
 
     useEffect(() => {
@@ -227,44 +227,44 @@ function PurchaseNFts({ id }: { id: string }) {
     return (
         <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
             <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium">#{id}</td>
-            <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{nft?.price && formatEther(nft?.price!)} CROP</td>
+            <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{nft?.price?.toString() && formatEther(nft?.price!)!} CROP</td>
             <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
                 <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
                     data-v0-t="badge">Pending Delivery</div>
             </td>
             <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 space-x-2">
-                
-               {
-                nft?.payedFor && !nft.payerChecked ?  <button
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="m9 12 2 2 4-4"></path>
-                </svg>Confirm Delivery</button> :  <button
-                className="inline-flex items-center justify-center gap-2 bg-green-200 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="m9 12 2 2 4-4"></path>
-                </svg>Delivery Confirmed</button>
-               }
+
+                {
+                    nft?.payedFor && !nft.payerChecked ? <button
+                        className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                            strokeLinejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>Confirm Delivery</button> : <button
+                            className="inline-flex items-center justify-center gap-2 bg-green-200 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                strokeLinejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>Delivery Confirmed</button>
+                }
                 {
                     nft?.payedFor && nft.payerChecked && <button
-                    onClick={handleopenDispute}
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" className="lucide lucide-circle-alert h-4 w-4 mr-2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" x2="12" y1="8" y2="12"></line>
-                        <line x1="12" x2="12.01" y1="16" y2="16"></line>
-                    </svg>Open Dispute
+                        onClick={handleopenDispute}
+                        className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                            strokeLinejoin="round" className="lucide lucide-circle-alert h-4 w-4 mr-2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" x2="12" y1="8" y2="12"></line>
+                            <line x1="12" x2="12.01" y1="16" y2="16"></line>
+                        </svg>Open Dispute
                     </button>
                 }
-                    </td>
+            </td>
         </tr>
     )
 }
@@ -272,8 +272,8 @@ function PurchaseNFts({ id }: { id: string }) {
 
 
 
-function ActiveListing({data, isLoading}:{data: readonly  BigInt[]| undefined, isLoading:boolean}) {
-   
+function ActiveListing({ data, isLoading }: { data: readonly BigInt[] | undefined, isLoading: boolean }) {
+
 
     return (
         <div>
@@ -331,8 +331,8 @@ function ActiveListing({data, isLoading}:{data: readonly  BigInt[]| undefined, i
 function ListingNFt({ id }: { id: string }) {
     const [nft, setNFt] = useState<NFTCardProps | null>(null)
     const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
-    const {address} = useAccount()
-     const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
+    const { address } = useAccount()
+    const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
 
 
     const handleopenDispute = async () => {
@@ -365,7 +365,7 @@ function ListingNFt({ id }: { id: string }) {
     return (
         <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
             <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium">#{id}</td>
-            <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0"> {nft?.price && formatEther(nft?.price!)} CROP</td>
+            <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0"> {nft?.price?.toString() && formatEther(nft?.price!)} CROP</td>
             <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
                 {
                     nft?.payedFor ? <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground bg-green-50"
@@ -375,52 +375,52 @@ function ListingNFt({ id }: { id: string }) {
             </td>
             <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 space-x-2">
                 {
-                    nft?.payedFor && nft.payer ==address && !nft.payerChecked ? <button
+                    nft?.payedFor && nft.payer == address && !nft.payerChecked ? <button
                         className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
+                            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                            strokeLinejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <path d="m9 12 2 2 4-4"></path>
                         </svg>Confirm Delivery</button> : !nft?.buyerChecked && <button
                             disabled
                             className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="m9 12 2 2 4-4"></path>
-                        </svg>Confirm Delivery</button> 
+                                fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                strokeLinejoin="round" className="lucide lucide-circle-check h-4 w-4 mr-2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>Confirm Delivery</button>
                 }
                 {
                     nft?.payedFor && nft.buyerChecked && nft.payerChecked && nft.payer != address ? <button
                         className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" className="lucide lucide-dollar-sign h-4 w-4 mr-2">
+                            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                            strokeLinejoin="round" className="lucide lucide-dollar-sign h-4 w-4 mr-2">
                             <line x1="12" x2="12" y1="2" y2="22"></line>
                             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                         </svg>Withdraw Payment</button> : nft?.payedFor && <button
                             disabled
                             className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" className="lucide lucide-dollar-sign h-4 w-4 mr-2">
-                            <line x1="12" x2="12" y1="2" y2="22"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>Awaiting nft Release</button>
+                                fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                strokeLinejoin="round" className="lucide lucide-dollar-sign h-4 w-4 mr-2">
+                                <line x1="12" x2="12" y1="2" y2="22"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>Awaiting nft Release</button>
                 }
                 <button
                     onClick={handleopenDispute}
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"><svg
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" className="lucide lucide-circle-alert h-4 w-4 mr-2">
+                        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                        strokeLinejoin="round" className="lucide lucide-circle-alert h-4 w-4 mr-2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" x2="12" y1="8" y2="12"></line>
                         <line x1="12" x2="12.01" y1="16" y2="16"></line>
                     </svg>Open Dispute
-            </button>
+                </button>
             </td>
         </tr>
     )

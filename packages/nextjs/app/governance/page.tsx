@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { LoaderIcon } from 'react-hot-toast'
 import { useAccount, useWriteContract } from 'wagmi'
-import { useScaffoldReadContract, useTargetNetwork } from '~~/hooks/scaffold-eth'
+import { useScaffoldReadContract, useTargetNetwork, useTransactor } from '~~/hooks/scaffold-eth'
 import DeployedContracts from "~~/contracts/deployedContracts";
 
 
@@ -14,6 +14,7 @@ function Governance() {
     }
 
     const [tab, setTab] = useState<TabState>(TabState.Dashboard)
+
     return (
         <div>
             <div className="container mx-auto p-6">
@@ -69,6 +70,13 @@ export default Governance
 
 
 function ActiveDispute() {
+    const { address: userAddress } = useAccount()
+    // const {data, error, isFetching, isLoading }= useScaffoldReadContract({
+    //         contractName: "CropMarketplace",
+    //         functionName:  "getAllUserNFT",
+    //         args:[userAddress],
+    // })
+
     return (
         <div>
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -149,6 +157,8 @@ function Dashboard() {
 
     const { address: userAddress } = useAccount()
     const { targetNetwork } = useTargetNetwork();
+    const { isPending, writeContractAsync } = useWriteContract();
+    const writeTxn = useTransactor();
 
     const { data, error, isFetching, isLoading } = useScaffoldReadContract({
         contractName: "CropMarketplace",
@@ -158,7 +168,7 @@ function Dashboard() {
     useEffect(() => {
         console.log(data)
     })
-    const { isPending, writeContractAsync } = useWriteContract();
+
 
     const handleBecomeResolver = async () => {
         if (writeContractAsync) {
@@ -262,8 +272,5 @@ function Dashboard() {
             </div>
         </div>
     )
-}
-function writeTxn(makeWriteWithParams: () => Promise<`0x${string}`>) {
-    throw new Error('Function not implemented.')
 }
 

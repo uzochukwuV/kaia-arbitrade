@@ -48,11 +48,16 @@
     "verify": "yarn hardhat:verify"
   },
   "devDependencies": {
-    "husky": "~8.0.3",
+    "husky": "^9.1.7",
     "lint-staged": "~13.2.2"
   },
   "packageManager": "yarn@3.2.3",
   "engines": {
     "node": ">=18.18.0"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.66.9",
+    "viem": "2.x",
+    "wagmi": "^2.14.11"
   }
 }

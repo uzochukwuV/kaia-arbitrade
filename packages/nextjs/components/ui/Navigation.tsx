@@ -1,6 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react'
+
 import { hardhat } from 'viem/chains';
-import { useOutsideClick, useTargetNetwork } from '~~/hooks/scaffold-eth';
+import {  useTargetNetwork } from '~~/hooks/scaffold-eth';
 import { FaucetButton, RainbowKitCustomConnectButton } from '../scaffold-eth';
 import Link from 'next/link';
 
@@ -8,12 +8,13 @@ function Navigation() {
     const { targetNetwork } = useTargetNetwork();
       const isLocalNetwork = targetNetwork.id === hardhat.id;
     
-      const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-      const burgerMenuRef = useRef<HTMLDivElement>(null);
-      useOutsideClick(
-        burgerMenuRef,
-        useCallback(() => setIsDrawerOpen(false), []),
-      );
+    //   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    //   const burgerMenuRef = useRef<HTMLDivElement>(null);
+
+    //   useOutsideClick(
+    //     burgerMenuRef,
+    //     useCallback(() => setIsDrawerOpen(false), []),
+    //   );
     return (
         <div className=' mx-auto'>
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
