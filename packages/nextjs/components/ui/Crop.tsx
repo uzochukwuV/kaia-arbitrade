@@ -39,7 +39,7 @@ export function Crop({ id }: { id: bigint }) {
   //   await ApproveCoin(
   //     {
   //       functionName: "approve",
-  //       args: [DeployedContracts[31337].CropMarketplace.address, parseEther("200")],
+  //       args: [DeployedContracts[4157].CropMarketplace.address, parseEther("200")],
   //     },
   //     {
   //       onBlockConfirmation: txnReceipt => {
@@ -56,7 +56,7 @@ export function Crop({ id }: { id: bigint }) {
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[31337].CropMarketplace.address, id],
+          args: [DeployedContracts[4157].CropMarketplace.address, id],
         },
         {
           onBlockConfirmation: txnReceipt => {

@@ -550,12 +550,11 @@ export default function ExplorePage() {
   );
 }
 
-export function MarketNFTState({ id }: { id: string }) {
+function MarketNFTState({ id }: { id: string }) {
   const [nft, setNFt] = useState<NFTCardProps | null>(null);
   const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
 
   useEffect(() => {
-    console.log({ ...marketplaceData, ...metadata });
     setNFt({ ...marketplaceData, ...metadata, id: id });
   }, [nftLoading, id, marketplaceData]);
 
@@ -584,7 +583,6 @@ export function NFTState({ id }: { id: string }) {
   const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
 
   useEffect(() => {
-    console.log({ ...marketplaceData, ...metadata });
     setNFt({ ...marketplaceData, ...metadata, id: id });
   }, [nftLoading, id, marketplaceData]);
 
@@ -681,7 +679,7 @@ const MarketNFTCARD: FC<NFTCardProps> = ({
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[31337].CropMarketplace.address, parseEther("2.5")],
+          args: [DeployedContracts[4157].CropMarketplace.address, parseEther("2.5")],
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -745,7 +743,7 @@ const MarketNFTCARD: FC<NFTCardProps> = ({
               tags.split(",").map(i => {
                 return (
                   <div
-                  key={i}
+                    key={i}
                     className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
                     data-v0-t="badge"
                   >

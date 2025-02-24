@@ -86,7 +86,6 @@ function Profile() {
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
-               
                 strokeLinejoin="round"
                 className="lucide lucide-package h-4 w-4 mr-2"
               >
@@ -109,7 +108,6 @@ function Profile() {
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
-               
                 strokeLinejoin="round"
                 className="lucide lucide-store h-4 w-4 mr-2"
               >
@@ -133,7 +131,6 @@ function Profile() {
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
-              
                 strokeLinejoin="round"
                 className="lucide lucide-store h-4 w-4 mr-2"
               >

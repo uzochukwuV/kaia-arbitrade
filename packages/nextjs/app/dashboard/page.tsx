@@ -451,7 +451,7 @@ function ListingNFt({ id }: { id: string }) {
   useEffect(() => {
     console.log({ ...marketplaceData, ...metadata });
     setNFt({ ...marketplaceData, ...metadata, id: id });
-  }, [nftLoading, id, marketplaceData]);
+  }, [nftLoading, id, marketplaceData, metadata]);
 
   return (
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">

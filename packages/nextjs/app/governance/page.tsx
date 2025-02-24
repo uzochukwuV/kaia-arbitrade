@@ -238,8 +238,8 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[31337].CropMarketplace.address,
-            abi: DeployedContracts[31337].CropMarketplace.abi,
+            address: DeployedContracts[4157].CropMarketplace.address,
+            abi: DeployedContracts[4157].CropMarketplace.abi,
             functionName: "registerResolver",
           });
         await writeTxn(makeWriteWithParams);
