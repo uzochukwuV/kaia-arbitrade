@@ -22,38 +22,35 @@ const deployAgriMarketplace: DeployFunction = async function (hre: HardhatRuntim
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("CropCoin", {
-    from: deployer,
-    // Contract constructor arguments
-    args: ["0x29Ff5f41Ad7c7E9947136B1CF3E7664F465CC0eF", "CropCoin", "CrC"],
-    log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
-    autoMine: true,
-  });
+  // await deploy("CropCoin", {
+  //   from: deployer,
+  //   // Contract constructor arguments
+  //   args: ["0x29Ff5f41Ad7c7E9947136B1CF3E7664F465CC0eF", "CropCoin", "CrC"],
+  //   log: true,
+  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
+  //   autoMine: true,
+  // });
 
-  await deploy("CropNft", {
-    from: deployer,
-    // Contract constructor arguments
-    args: [deployer],
-    log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
-    autoMine: true,
-  });
-  const AgriCoin = await hre.ethers.getContract<Contract>("CropCoin", deployer);
-  const AgriNft = await hre.ethers.getContract<Contract>("CropNft", deployer);
+  // await deploy("CropNft", {
+  //   from: deployer,
+  //   // Contract constructor arguments
+  //   args: [deployer],
+  //   log: true,
+  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
+  //   autoMine: true,
+  // });
+  // const AgriCoin = await hre.ethers.getContract<Contract>("CropCoin", deployer);
+  // // const AgriNft = await hre.ethers.getContract<Contract>("CropNft", deployer);
 
-  const coinAddr = await AgriCoin.getAddress();
-  const nftAddr = await AgriNft.getAddress();
+  // const coinAddr = await AgriCoin.getAddress();
+  // const nftAddr = await AgriNft.getAddress();
 
   await deploy("CropMarketplace", {
     from: deployer,
     // Contract constructor arguments
     args: [
-      nftAddr,
-      coinAddr,
-      coinAddr,
       deployer,
     ],
     log: true,

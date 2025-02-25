@@ -91,11 +91,8 @@ contract CropMarketplace {
     }
 
     // constructor
-    constructor(address _nftAddress, address _coinAddress, address _governanceTokenAddress, address _owner) {
+    constructor( address _owner) {
         owner = _owner;
-        nft = CropNft(_nftAddress);
-        coin = IERC20(_coinAddress);
-        governanceToken = IERC20(_governanceTokenAddress);
     }
 
     function updateNFTAddress(address _newNFT) external onlyOwner {

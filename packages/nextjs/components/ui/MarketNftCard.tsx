@@ -37,7 +37,7 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[31337].CropMarketplace.address, parseEther(price!.toString())],
+          args: [DeployedContracts[4157].CropMarketplace.address, parseEther(price!.toString())],
         },
         {
           onBlockConfirmation: txnReceipt => {

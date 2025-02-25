@@ -335,8 +335,8 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[31337].CropMarketplace.address,
-            abi: DeployedContracts[31337].CropMarketplace.abi,
+            address: DeployedContracts[4157].CropMarketplace.address,
+            abi: DeployedContracts[4157].CropMarketplace.abi,
             functionName: "claimResolverReward",
           });
         await writeTxn(makeWriteWithParams);
@@ -351,10 +351,10 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[31337].CropCoin.address,
-            abi: DeployedContracts[31337].CropCoin.abi,
+            address: DeployedContracts[4157].CropCoin.address,
+            abi: DeployedContracts[4157].CropCoin.abi,
             functionName: "approve",
-            args: [DeployedContracts[31337].CropMarketplace.address, parseEther("1000")],
+            args: [DeployedContracts[4157].CropMarketplace.address, parseEther("1000")],
           });
         await writeTxn(makeWriteWithParams);
       } catch (e: any) {
@@ -363,8 +363,8 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[31337].CropMarketplace.address,
-            abi: DeployedContracts[31337].CropMarketplace.abi,
+            address: DeployedContracts[4157].CropMarketplace.address,
+            abi: DeployedContracts[4157].CropMarketplace.abi,
             functionName: "registerResolver",
           });
         await writeTxn(makeWriteWithParams);
