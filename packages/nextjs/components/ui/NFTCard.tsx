@@ -21,6 +21,7 @@ const NFTCard: FC<NFTCardProps> = ({
   quantity,
   harvestDate,
   tags,
+  disputed,
   onClick,
 }) => {
   const { writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
@@ -137,18 +138,12 @@ const NFTCard: FC<NFTCardProps> = ({
             </div>}
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
-          <div
-            className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            data-v0-t="badge"
-          >
-            Organic
-          </div>
-          <div
-            className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            data-v0-t="badge"
-          >
-            Premium
-          </div>
+          {
+            tags && tags.split(',').map((tag) => (
+              <span key={tag} className="px-2 py-1 bg-primary/20 text-primary rounded-full text-xs">{tag}</span>
+            ))
+          }
+          
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {payedFor && <span className="px-2 py-1 bg-success/20 text-success rounded-full text-xs">Paid</span>}
@@ -211,7 +206,7 @@ const NFTCard: FC<NFTCardProps> = ({
           </button>
         )}
         {(sellerChecked && !buyerChecked) ||
-          (!sellerChecked && buyerChecked && (
+          (!sellerChecked && buyerChecked && !disputed &&  (
             <button
               onClick={() => {
                 console.log("dispute");
@@ -229,6 +224,13 @@ const NFTCard: FC<NFTCardProps> = ({
             Collect Payment
           </button>
         )}
+        {
+          disputed && (
+            <div  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+            Disputed
+          </div>
+          )
+        }
       </div>
     </div>
   );

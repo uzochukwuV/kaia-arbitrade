@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LoaderIcon } from "react-hot-toast";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { useNFTData } from "~~/components/ui/NFTdata";
@@ -27,6 +28,12 @@ export default function Dashboard() {
     functionName: "get_user_purchase",
     args: [BigInt(10), userAddress],
   });
+
+  const { data:crop, isFetching: cropBalFetching } = useScaffoldReadContract({
+        contractName: "CropCoin",
+        functionName: "balanceOf",
+        args: [userAddress],
+      });
 
 
   const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
@@ -77,6 +84,11 @@ export default function Dashboard() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">CropSwap Dashboard</h1>
           <p className="text-muted-foreground">Manage your listings, purchases, and sales</p>
+          <div>
+            <div className="text-sm text-black">
+              Crop Balance : {cropBalFetching || crop == undefined ? <LoaderIcon /> : formatEther(crop! as bigint)} CropCoin
+            </div>
+          </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -362,7 +374,7 @@ function PurchaseNFts({ id, handleopenDispute, handleConfirmDelivery }: { id: st
             Delivery Confirmed
           </button>
         )}
-        {nft?.payedFor && nft.owner == address && !nft.buyerChecked || nft?.payedFor && nft.buyer == address && !nft.sellerChecked &&   (
+        {nft?.payedFor && nft.owner == address && !nft.buyerChecked || nft?.payedFor && nft.buyer == address && !nft.sellerChecked && !nft.disputed && (
           <button
             onClick={() => handleopenDispute(id)}
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
@@ -386,6 +398,32 @@ function PurchaseNFts({ id, handleopenDispute, handleConfirmDelivery }: { id: st
             Open Dispute
           </button>
         )}
+
+        {
+          nft?.disputed && (
+            <button
+              className="inline-flex items-center bg-red-500 text-white  justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-circle-alert h-4 w-4 mr-2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" x2="12" y1="8" y2="12"></line>
+                <line x1="12" x2="12.01" y1="16" y2="16"></line>
+              </svg>
+              Dispute Opened (Awaiting Resolution)
+            </button>
+          ) 
+        }
       </td>
     </tr>
   );
@@ -449,7 +487,29 @@ function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string
   const [nft, setNFt] = useState<NFTCardProps | null>(null);
   const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
   const { address } = useAccount();
- 
+
+  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
+
+  const getPayment = async () => {
+    if (writeContractAsync) {
+      try {
+        await writeContractAsync(
+          {
+            functionName: "get_payment",
+            args: [BigInt(id)],
+          },
+          {
+            onBlockConfirmation: txnReceipt => {
+              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+            },
+          },
+        );
+      } catch (e: any) {
+        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+      }
+    }
+  };
+
  
 
   useEffect(() => {
@@ -484,7 +544,7 @@ function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 space-x-2">
         {nft?.payedFor && nft.buyer == address && !nft.buyerChecked ? (
           <button 
-          onClick={() => handleopenDispute(id, address == nft?.buyer)}
+          onClick={() => handleConfirmDelivery(id, address == nft?.buyer)}
           className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
               
             <svg
@@ -505,9 +565,9 @@ function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string
             Confirm Delivery
           </button>
         ) : (
-          !nft?.buyerChecked && (
+          !nft?.sellerChecked && (
             <button
-              onClick={() => handleopenDispute(id, address == nft?.buyer)}
+              onClick={() => handleConfirmDelivery(id, address == nft?.buyer)}
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
             >
               <svg
@@ -529,8 +589,10 @@ function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string
             </button>
           )
         )}
-        {nft?.payedFor && nft.buyerChecked && nft.sellerChecked && nft.owner != address ? (
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+        {nft?.payedFor && nft.buyerChecked && nft.sellerChecked ? (
+          <button
+            onClick={getPayment}
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

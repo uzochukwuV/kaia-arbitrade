@@ -13,6 +13,7 @@ export interface NFTCardProps {
   quantity?: number | string;
   harvestDate?: string;
   tags?: string;
+  disputed?: boolean;
   onClick?: () => void;
 }
 

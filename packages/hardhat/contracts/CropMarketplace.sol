@@ -25,6 +25,9 @@ contract CropMarketplace {
     uint256 public resolverStakeRequirement = 1000 * 10 ** 18; // Example stake required
     mapping(address => uint256) public resolverStake;
     uint256 xfiToCrop =  1;
+    uint256 public constant RESOLUTION_PERIOD = 7 days;
+    mapping(uint128 => uint256) public disputeStartTime;
+    mapping(uint128 => mapping(address => bool)) public hasVoted;
 
     struct AssetData {
         address owner;
@@ -166,8 +169,13 @@ contract CropMarketplace {
     }
 
     function user_govern_data(address user) public view returns (userGovData memory) {
-        userGovData memory assetData = userGovData(isResolver[user], resolverStake[user], resolverReward[user]);
-        return assetData;
+        require(user != address(0), "Invalid address");
+        userGovData memory userData = userGovData({
+            isResolver: isResolver[user],
+            staked: resolverStake[user],
+            reward: resolverReward[user]
+        });
+        return userData;
     }
 
     function payForStock(uint128 nftId, bool withXfi) external noReentrant payable returns (bool) {
@@ -281,9 +289,7 @@ contract CropMarketplace {
 
         emit DisputeOpened(nftId, msg.sender, isBuyer);
     }
-    uint256 public constant RESOLUTION_PERIOD = 7 days;
-    mapping(uint128 => uint256) public disputeStartTime;
-    mapping(uint128 => mapping(address => bool)) public hasVoted;
+    
 
     function voteOnDispute(uint128 nftId, bool voteForBuyer) external onlyResolver(nftId) {
         Dispute storage dispute = disputes[nftId];
@@ -368,12 +374,15 @@ contract CropMarketplace {
     }
 
     function registerResolver() external {
-        uint256 allowance = governanceToken.allowance(msg.sender, address(this));
-
-        // Then check if the allowance is sufficient
-        bool isAllowed = allowance >= resolverStakeRequirement;
-        require(isAllowed, "NOT_APPROVED");
-        require(governanceToken.transferFrom(msg.sender, address(this), resolverStakeRequirement), "STAKE_FAILED");
+        require(!isResolver[msg.sender], "ALREADY_RESOLVER");
+        require(
+            governanceToken.balanceOf(msg.sender) >= resolverStakeRequirement,
+            "INSUFFICIENT_BALANCE"
+        );
+        require(
+            governanceToken.transferFrom(msg.sender, address(this), resolverStakeRequirement),
+            "STAKE_TRANSFER_FAILED"
+        );
         isResolver[msg.sender] = true;
         resolverStake[msg.sender] = resolverStakeRequirement;
         totalGovernanceToken += resolverStakeRequirement;
