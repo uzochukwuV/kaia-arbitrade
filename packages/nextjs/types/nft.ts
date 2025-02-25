@@ -25,3 +25,8 @@ export interface NFTMetaData {
   harvestDate?: string;
   tags?: string;
 }
+
+export interface Context {
+  filter: string[];
+  setFilter: (nfts: string[]) => void;
+}

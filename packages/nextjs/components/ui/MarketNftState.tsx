@@ -3,7 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { NFTCardProps } from "~~/types/nft";
 import { useNFTData } from "./NFTdata";
 import { MarketNFTCARD } from "./MarketNftCard";
-import { nftContext } from "~~/app/explore/page";
+import { nftContext } from "~~/utils/context";
+
 
 export function MarketNFTState({ id }: { id: string }) {
     const [nft, setNFt] = useState<NFTCardProps | null>(null);
