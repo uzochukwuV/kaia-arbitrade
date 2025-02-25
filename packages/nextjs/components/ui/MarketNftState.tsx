@@ -1,6 +1,6 @@
 "use client"
 import { useContext, useEffect, useState } from "react";
-import { NFTCardProps, NFTMetaData } from "~~/types/nft";
+import { NFTCardProps } from "~~/types/nft";
 import { useNFTData } from "./NFTdata";
 import { MarketNFTCARD } from "./MarketNftCard";
 import { nftContext } from "~~/app/explore/page";
@@ -8,12 +8,20 @@ import { nftContext } from "~~/app/explore/page";
 export function MarketNFTState({ id }: { id: string }) {
     const [nft, setNFt] = useState<NFTCardProps | null>(null);
     const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
-    const {nfts, setNft} = useContext(nftContext)
+    const {filter, setFilter} = useContext(nftContext)
   
     useEffect(() => {
-      setNFt({ ...marketplaceData, ...metadata, id: id });
-      setNft([...nfts!, { ...marketplaceData, ...metadata, id: id }])
-    }, [nftLoading, id, marketplaceData]);
+      
+      setNFt({ ...marketplaceData, ...metadata, id: id , tags:metadata?.tags});
+     
+    }, [nftLoading, id, marketplaceData, metadata]);
+
+    if(filter.length > 0 && nft?.tags && nft?.tags.split(',').some((tag) => filter.some((f) =>{
+      console.log(tag, f)
+      return !tag.includes(f) || !f.includes(tag)
+    }))){
+      return ""
+    }
   
     return (
       <MarketNFTCARD
@@ -24,13 +32,14 @@ export function MarketNFTState({ id }: { id: string }) {
         price={BigInt(nft?.price || 0)}
         image={nft?.image}
         owner={nft?.owner}
-        payer={nft?.payer}
+        buyer={nft?.buyer}
         payedFor={nft?.payedFor}
         booked={nft?.booked}
-        payerChecked={nft?.payerChecked}
+        sellerChecked={nft?.sellerChecked}
         buyerChecked={nft?.buyerChecked}
         quantity={nft?.quantity}
         harvestDate={nft?.harvestDate}
+        tags={nft?.tags}
       />
     );
   }

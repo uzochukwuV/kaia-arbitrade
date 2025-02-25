@@ -10,15 +10,15 @@ import { useState } from "react";
 import { createContext } from "react";
 
 interface Context {
-  nfts: NFTCardProps[] | null;
-  setNft: (nfts: NFTCardProps[]) => void;
+  filter: string[];
+  setFilter: (nfts: string[]) => void;
 }
 
 
 export const nftContext = createContext<Context>({} as Context);
 
 export default function ExplorePage() {
-  const [nfts, setNft] = useState<NFTCardProps[] | null>(null);
+  const [filter, setFilter] = useState<string[]>([]);
 
   const { data, isFetching } = useScaffoldReadContract({
     contractName: "CropMarketplace",
@@ -26,15 +26,27 @@ export default function ExplorePage() {
     args: [BigInt(0), BigInt(10)],
   });
 
+    const handleFilter = (e: React.MouseEvent<HTMLButtonElement>, value:string, value1:string)=>{
+        e.currentTarget.classList.toggle("bg-primary")
+        setFilter((prev) =>{
+            if(prev.includes(value.toLowerCase()) || prev.includes(value1.toLowerCase())){
+                return prev.filter((i)=> !i.toLowerCase().includes(value.toLowerCase()) && !value.toLowerCase().includes(i.toLowerCase()) && !i.toLowerCase().includes(value1.toLowerCase()) && !value1.toLowerCase().includes(i.toLowerCase()))
+            }else{
+                return [...prev, value.toLowerCase(), value1.toLowerCase()]
+            }
+        })
+      }
+    
+
   return (
     <>
-    <nftContext.Provider value={{nfts, setNft}}>
+    <nftContext.Provider value={{filter, setFilter}}>
       {/*  */}
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Explore Market</h1>
+              <h1 className="text-3xl font-bold mb-2">Explore Market </h1>
               <p className="text-muted-foreground">Discover and trade agricultural products</p>
             </div>
             <div className="flex items-center gap-2">
@@ -195,11 +207,12 @@ export default function ExplorePage() {
                         <div className="space-y-2">
                           <label className="flex items-center space-x-2 cursor-pointer">
                             <button
+                              onClick={(e)=>handleFilter(e, "Grains", "Cereals")}    
                               type="button"
                               role="checkbox"
                               aria-checked="false"
-                              data-state="unchecked"
-                              value="on"
+                              
+                             
                               className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                               id="Grains &amp; Cereals"
                             ></button>
@@ -209,6 +222,7 @@ export default function ExplorePage() {
                             <button
                               type="button"
                               role="checkbox"
+                              onClick={(e)=>handleFilter(e, "Vegetable", "Fruit")}
                               aria-checked="false"
                               data-state="unchecked"
                               value="on"
@@ -220,6 +234,7 @@ export default function ExplorePage() {
                           <label className="flex items-center space-x-2 cursor-pointer">
                             <button
                               type="button"
+                              onClick={(e)=>handleFilter(e, "Livestock", "Dairy")}
                               role="checkbox"
                               aria-checked="false"
                               data-state="unchecked"
@@ -233,6 +248,7 @@ export default function ExplorePage() {
                             <button
                               type="button"
                               role="checkbox"
+                              onClick={(e)=>handleFilter(e, "Seeds", "Seedlings")}
                               aria-checked="false"
                               data-state="unchecked"
                               value="on"
@@ -245,6 +261,7 @@ export default function ExplorePage() {
                             <button
                               type="button"
                               role="checkbox"
+                              onClick={(e)=>handleFilter(e, "Organic Produce", "Specialty Crops")}
                               aria-checked="false"
                               data-state="unchecked"
                               value="on"
@@ -258,6 +275,7 @@ export default function ExplorePage() {
                               type="button"
                               role="checkbox"
                               aria-checked="false"
+                              onClick={(e)=>handleFilter(e, "Specialty Crops", "Specialty Crops")}
                               data-state="unchecked"
                               value="on"
                               className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"

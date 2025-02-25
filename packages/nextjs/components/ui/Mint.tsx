@@ -65,8 +65,8 @@ export default function NFTMintingForm() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[4157].CropNft.address,
-            abi: DeployedContracts[4157].CropNft.abi,
+            address: DeployedContracts[31337].CropNft.address,
+            abi: DeployedContracts[31337].CropNft.abi,
             functionName: "safeMint",
             args: [connectedAddress!, url],
           });

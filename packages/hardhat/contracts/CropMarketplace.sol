@@ -31,9 +31,9 @@ contract CropMarketplace {
         uint128 price;
         bool payedFor;
         bool booked;
-        address payer; // buyer
-        bool payerChecked;
-        bool buyerChecked; // seller error
+        address buyer; // buyer
+        bool buyerChecked;
+        bool sellerChecked; // seller error
         bool disputed;
     }
 
@@ -57,10 +57,10 @@ contract CropMarketplace {
 
     event PaymentWithdrawn(uint128 indexed nftId, address indexed seller, uint256 amount);
     event Listed(uint128 indexed nftId, address indexed lister, uint128 price);
-    event PaymentReceived(uint128 indexed nftId, address indexed payer, uint128 price);
-    event ItemDelivered(uint128 indexed nftId, address indexed confirmer, bool isPayer);
+    event PaymentReceived(uint128 indexed nftId, address indexed buyer, uint128 price);
+    event ItemDelivered(uint128 indexed nftId, address indexed confirmer, bool isBuyer);
 
-    event DisputeOpened(uint128 indexed nftId, address indexed disputer, bool isPayer);
+    event DisputeOpened(uint128 indexed nftId, address indexed disputer, bool isBuyer);
     event DisputeVoted(uint128 indexed nftId, address indexed resolver, bool voteForBuyer);
     event DisputeResolved(uint128 indexed nftId, bool voteForBuyer);
      event TokenUpdated(string tokenType, address oldAddress, address newAddress);
@@ -88,8 +88,8 @@ contract CropMarketplace {
     }
 
     // constructor
-    constructor(address _nftAddress, address _coinAddress, address _governanceTokenAddress) {
-        owner = msg.sender;
+    constructor(address _nftAddress, address _coinAddress, address _governanceTokenAddress, address _owner) {
+        owner = _owner;
         nft = CropNft(_nftAddress);
         coin = IERC20(_coinAddress);
         governanceToken = IERC20(_governanceTokenAddress);
@@ -175,12 +175,12 @@ contract CropMarketplace {
         require(assetData.price > 0, "INVALID_PRICE");
         require(assetData.owner != msg.sender, "CANT_BUY_YOUR_PRODCT");
 
-        // Ensure payer has approved the contract to spend the amount
+        // Ensure buyer has approved the contract to spend the amount
         if(withXfi){
             require(msg.value >= assetData.price , "NOT_ENOUGH_XFI");
 
             assetData.payedFor = true;
-            assetData.payer = msg.sender;
+            assetData.buyer = msg.sender;
 
             emit PaymentReceived(nftId, msg.sender, assetData.price);
             return true;
@@ -191,39 +191,39 @@ contract CropMarketplace {
             require(success, "TRANSFER_FAILED");
 
             assetData.payedFor = true;
-            assetData.payer = msg.sender;
+            assetData.buyer = msg.sender;
 
             emit PaymentReceived(nftId, msg.sender, assetData.price);
             return true;
         }
     }
 
-    function mark_as_delivered(uint128 nftId, bool isPayer) external noReentrant {
+    function mark_as_delivered(uint128 nftId, bool isBuyer) external noReentrant {
         AssetData storage assetData = assets[nftId];
         require(assetData.payedFor, "NOT_PAYED_FOR");
-        if (isPayer) {
-            require(assetData.payer == msg.sender, "NOT_PAYER");
-            require(assetData.payerChecked == true, "ALREADY_CHECKED");
-            assetData.payerChecked = true;
-        } else {
-            require(assetData.owner == msg.sender, "NOT_PAYER");
-            require(assetData.buyerChecked == true, "ALREADY_CHECKED");
+        if (isBuyer) {
+            require(assetData.buyer == msg.sender, "NOT_Buyer");
+            require(assetData.buyerChecked == false, "ALREADY_CHECKED");
             assetData.buyerChecked = true;
+        } else {
+            require(assetData.owner == msg.sender, "NOT_SELLER");
+            require(assetData.sellerChecked == false, "ALREADY_CHECKED");
+            assetData.sellerChecked = true;
         }
-        emit ItemDelivered(nftId, msg.sender, isPayer);
+        emit ItemDelivered(nftId, msg.sender, isBuyer);
     }
 
     function get_payment(uint128 nftId) external noReentrant {
         AssetData storage assetData = assets[nftId];
         require(assetData.payedFor, "NOT_PAYED_FOR");
         require(assetData.owner == msg.sender, "NOT_OWNER");
-        require(assetData.payerChecked, "PAYER_NOT_VERIFIED");
-        require(assetData.buyerChecked, "SELLER_NOT_VERIFIED");
+        require(assetData.buyerChecked, "BUYER_NOT_VERIFIED");
+        require(assetData.sellerChecked, "SELLER_NOT_VERIFIED");
         uint128 price = uint128((assetData.price * 9) / 10);
 
         bool success = coin.transfer(msg.sender, price);
         require(success, "TRANSFER_FAILED");
-        nft.safeTransferFrom(address(this), assetData.payer, nftId);
+        nft.safeTransferFrom(address(this), assetData.buyer, nftId);
 
         delete assets[nftId];
         emit PaymentWithdrawn(nftId, msg.sender, price);
@@ -254,7 +254,7 @@ contract CropMarketplace {
                 break;
             }
             AssetData storage assetData = assets[assetIds[i]];
-            if (assetData.payer == user) {
+            if (assetData.buyer == user) {
                 ids[step] = assetIds[i];
                 step++;
             }
@@ -265,7 +265,7 @@ contract CropMarketplace {
     function openDispute(uint128 nftId) external {
         AssetData storage asset = assets[nftId];
         require(asset.payedFor, "PAYMENT_NOT_MADE");
-        require(asset.payer == msg.sender || asset.owner == msg.sender, "NOT_INVOLVED");
+        require(asset.buyer == msg.sender || asset.owner == msg.sender, "NOT_INVOLVED");
 
         Dispute storage dispute = disputes[nftId];
         require(!dispute.resolved, "ALREADY_RESOLVED");
@@ -274,12 +274,12 @@ contract CropMarketplace {
         disputeIds.push(nftId);
         asset.disputed = true;
         dispute.nftId = nftId;
-        dispute.buyer = asset.payer;
+        dispute.buyer = asset.buyer;
         dispute.seller = asset.owner;
         dispute.id = disputeIds.length - 1;
-        bool ispayer = asset.payer == msg.sender;
+        bool isBuyer = asset.buyer == msg.sender;
 
-        emit DisputeOpened(nftId, msg.sender, ispayer);
+        emit DisputeOpened(nftId, msg.sender, isBuyer);
     }
     uint256 public constant RESOLUTION_PERIOD = 7 days;
     mapping(uint128 => uint256) public disputeStartTime;

@@ -8,8 +8,8 @@ import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 
 contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
     // Constants
-    uint256 public constant AIRDROP_AMOUNT = 20 * 10 ** 18;
-    uint256 public constant INITIAL_SUPPLY = 2000 * 10 ** 18;
+    uint256 public constant AIRDROP_AMOUNT = 10000 * 10 ** 18;
+    uint256 public constant INITIAL_SUPPLY = 20000 * 10 ** 18;
     uint256 public constant MAX_SUPPLY = 1000000 * 10 ** 18;
 
     // State variables
@@ -29,7 +29,7 @@ contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
         string memory _name,
         string memory _symbol
     ) ERC20(_name, _symbol) Ownable(initialOwner) ERC20Permit(_name) {
-        max_airdrop = 2000 * 10 ** decimals();
+        max_airdrop = 1000000 * 10 ** decimals();
         _mint(initialOwner, INITIAL_SUPPLY);
     }
 

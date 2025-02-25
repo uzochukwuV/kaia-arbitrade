@@ -11,12 +11,13 @@ import { NFTMetaData } from "~~/types/nft";
 
 export function Crop({ id }: { id: bigint }) {
   const [nft, setNFt] = useState<NFTMetaData | null>();
+  const [modal, setModal] = useState(false);
   const { data: connectedAddressNFT, isLoading: isConnectedAddressCounterLoading } = useScaffoldReadContract({
     contractName: "CropNft",
     functionName: "tokenURI",
     args: [BigInt(id)],
   });
-  const [price, setPrice] = useState("0.2");
+  const [price, setPrice] = useState("3");
 
   const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT || "" });
 
@@ -39,7 +40,7 @@ export function Crop({ id }: { id: bigint }) {
   //   await ApproveCoin(
   //     {
   //       functionName: "approve",
-  //       args: [DeployedContracts[4157].CropMarketplace.address, parseEther("200")],
+  //       args: [DeployedContracts[31337].CropMarketplace.address, parseEther("200")],
   //     },
   //     {
   //       onBlockConfirmation: txnReceipt => {
@@ -56,7 +57,7 @@ export function Crop({ id }: { id: bigint }) {
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[4157].CropMarketplace.address, id],
+          args: [DeployedContracts[31337].CropMarketplace.address, id],
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -90,13 +91,27 @@ export function Crop({ id }: { id: bigint }) {
   }
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
+    <div className="rounded-lg border relative bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
+      {
+        modal && <div className=" z-50 absolute top-0 left-0 right-0 bottom-0 bg-black/40 flex justify-center items-center">
+          <div className="bg-card p-4 rounded-lg flex flex-col justify-center items-center gap-4">
+            <h2 className=" text-white font-semibold">Set Price in CropCoin</h2>
+            <input type="number" onChange={(e)=>setPrice(e.target.value)} name="price" id="price" className=" py-2 px-6 border-slate-400 bg-black text-white flex-1" />
+            <button
+              onClick={handleListSale}
+              className="bg-green-300 py-2 px-6 rounded items-center gap-2 text-sm text-muted-foreground"
+            >
+              List Now
+            </button>
+          </div>
+        </div>
+      }
       <div className="aspect-square relative bg-muted">
         <Image
           src={nft?.image || ""}
           alt=""
           width={100}
-          height={100}
+          height={180}
           className=" h-full w-full top-0 bottom-0 rounded-md  bg-cover bg-center absolute"
         />
       </div>
@@ -122,10 +137,13 @@ export function Crop({ id }: { id: bigint }) {
         </div>
         <div className="mt-4 flex items-center gap-2"></div>
       </div>
-      <div className="flex items-center p-4 pt-0">
-        <input type="number" name="price" id="price" className=" py-4 px-6 border-slate-400"  />
+      <div className="flex items-center gap-6 p-4 pt-0">
+
         <div
-          onClick={handleListSale}
+
+          onClick={() => {
+            setModal(true);
+          }}
           className="flex cursor-pointer  bg-green-300 py-2 px-6 rounded items-center gap-2 text-sm text-muted-foreground"
         >
           <svg

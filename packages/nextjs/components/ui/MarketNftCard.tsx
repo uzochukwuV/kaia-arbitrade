@@ -1,7 +1,7 @@
 "use client"
 
 import { FC } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { NFTCardProps } from "~~/types/nft";
 import DeployedContracts from "~~/contracts/deployedContracts";
@@ -16,10 +16,10 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
   price,
   owner,
   description,
-  payer,
+  buyer,
   payedFor,
   booked,
-  payerChecked,
+  sellerChecked,
   buyerChecked,
   quantity,
   harvestDate,
@@ -28,6 +28,7 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
 }) => {
   const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
   const { address: connectedAddress } = useAccount();
+  const chainId = useChainId()
   const { writeContractAsync: Approve, isPending: pendingApprove } = useScaffoldWriteContract({
     contractName: "CropCoin",
   });
@@ -36,7 +37,7 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[4157].CropMarketplace.address, parseEther("2.5")],
+          args: [DeployedContracts[31337].CropMarketplace.address, parseEther(price!.toString())],
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -52,7 +53,7 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
         await writeContractAsync(
           {
             functionName: "payForStock",
-            args: [BigInt(id)],
+            args: [BigInt(id), false],
           },
           {
             onBlockConfirmation: txnReceipt => {
@@ -92,7 +93,9 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
               className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80"
               data-v0-t="badge"
             >
-              {formatEther(price!)} CROP
+             <span></span>
+             <span>{formatEther(price!)}CROP </span>
+              
             </div>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">

@@ -5,10 +5,10 @@ export interface NFTCardProps {
   price?: bigint;
   owner?: string;
   description?: string;
-  payer?: string;
+  buyer?: string;
   payedFor?: boolean;
   booked?: boolean;
-  payerChecked?: boolean;
+  sellerChecked?: boolean;
   buyerChecked?: boolean;
   quantity?: number | string;
   harvestDate?: string;

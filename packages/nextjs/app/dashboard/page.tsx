@@ -28,6 +28,49 @@ export default function Dashboard() {
     args: [BigInt(10), userAddress],
   });
 
+
+  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
+
+  const handleopenDispute = async (id:string) => {
+    if (writeContractAsync) {
+      try {
+        await writeContractAsync(
+          {
+            functionName: "openDispute",
+            args: [BigInt(id)],
+          },
+          {
+            onBlockConfirmation: txnReceipt => {
+              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+            },
+          },
+        );
+      } catch (e: any) {
+        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+      }
+    }
+  };
+
+  const handleConfirmDelivery= async (id:string, isPayer:boolean) => {
+    if (writeContractAsync) {
+      try {
+        await writeContractAsync(
+          {
+            functionName: "mark_as_delivered",
+            args: [BigInt(id),isPayer ],
+          },
+          {
+            onBlockConfirmation: txnReceipt => {
+              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+            },
+          },
+        );
+      } catch (e: any) {
+        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+      }
+    }
+  };
+
   return (
     <div>
       <div className="container mx-auto p-6">
@@ -192,9 +235,9 @@ export default function Dashboard() {
             //
           }
           {tab === TabState.Listings ? (
-            <ActiveListing data={trade} isLoading={tradeLoading} />
+            <ActiveListing data={trade} isLoading={tradeLoading} handleConfirmDelivery={handleConfirmDelivery}  handleopenDispute={handleopenDispute} />
           ) : (
-            <Purchases data={purchase} isLoading={isFetching} />
+            <Purchases data={purchase} isLoading={isFetching} handleConfirmDelivery={handleConfirmDelivery} handleopenDispute={handleopenDispute} />
           )}
         </div>
       </div>
@@ -202,7 +245,7 @@ export default function Dashboard() {
   );
 }
 
-function Purchases({ data, isLoading }: { data: readonly bigint[] | undefined; isLoading: boolean }) {
+function Purchases({ data, isLoading, handleopenDispute, handleConfirmDelivery }: {handleConfirmDelivery:any, data: readonly bigint[] | undefined; isLoading: boolean, handleopenDispute:any }) {
   return (
     <div>
       <div
@@ -243,7 +286,7 @@ function Purchases({ data, isLoading }: { data: readonly bigint[] | undefined; i
                       if (i == BigInt(0)) {
                         return "";
                       }
-                      return <PurchaseNFts id={i.toString()} key={i.toString()} />;
+                      return <PurchaseNFts id={i.toString()} key={i.toString()} handleopenDispute={handleopenDispute} handleConfirmDelivery={handleConfirmDelivery} />;
                     })}
                 </tbody>
               </table>
@@ -255,32 +298,12 @@ function Purchases({ data, isLoading }: { data: readonly bigint[] | undefined; i
   );
 }
 
-function PurchaseNFts({ id }: { id: string }) {
+function PurchaseNFts({ id, handleopenDispute, handleConfirmDelivery }: { id: string, handleopenDispute:any, handleConfirmDelivery:any }) {
   const [nft, setNFt] = useState<NFTCardProps | null>(null);
   const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
   const { address } = useAccount();
-  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
 
-  const handleopenDispute = async () => {
-    if (writeContractAsync) {
-      try {
-        await writeContractAsync(
-          {
-            functionName: "openDispute",
-            args: [BigInt(id)],
-          },
-          {
-            onBlockConfirmation: txnReceipt => {
-              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-            },
-          },
-        );
-      } catch (e: any) {
-        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
-      }
-    }
-  };
-
+ 
   useEffect(() => {
     console.log({ ...marketplaceData, ...metadata });
     setNFt({ ...marketplaceData, ...metadata, id: id });
@@ -300,8 +323,8 @@ function PurchaseNFts({ id }: { id: string }) {
         </div>
       </td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 space-x-2">
-        {nft?.payedFor && !nft.payerChecked ? (
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+        {nft?.payedFor && nft.owner == address && !nft.sellerChecked || nft?.payedFor && nft.buyer == address && !nft.buyerChecked  ? (
+          <button onClick={()=>handleConfirmDelivery(id,address==nft.buyer )} className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -339,9 +362,9 @@ function PurchaseNFts({ id }: { id: string }) {
             Delivery Confirmed
           </button>
         )}
-        {nft?.payedFor && nft.payerChecked && (
+        {nft?.payedFor && nft.owner == address && !nft.buyerChecked || nft?.payedFor && nft.buyer == address && !nft.sellerChecked &&   (
           <button
-            onClick={handleopenDispute}
+            onClick={() => handleopenDispute(id)}
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
           >
             <svg
@@ -368,7 +391,7 @@ function PurchaseNFts({ id }: { id: string }) {
   );
 }
 
-function ActiveListing({ data, isLoading }: { data: readonly bigint[] | undefined; isLoading: boolean }) {
+function ActiveListing({ data, isLoading, handleopenDispute,handleConfirmDelivery }: {handleConfirmDelivery:any, data: readonly bigint[] | undefined; isLoading: boolean, handleopenDispute:any }) {
   return (
     <div>
       <div
@@ -410,7 +433,7 @@ function ActiveListing({ data, isLoading }: { data: readonly bigint[] | undefine
                         return "";
                       }
 
-                      return <ListingNFt id={i.toString()} key={i.toString()} />;
+                      return <ListingNFt id={i.toString()} key={i.toString()} handleopenDispute={handleopenDispute} handleConfirmDelivery={handleConfirmDelivery} />;
                     })}
                 </tbody>
               </table>
@@ -422,31 +445,12 @@ function ActiveListing({ data, isLoading }: { data: readonly bigint[] | undefine
   );
 }
 
-function ListingNFt({ id }: { id: string }) {
+function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string,handleopenDispute:any ,handleConfirmDelivery:any}) {
   const [nft, setNFt] = useState<NFTCardProps | null>(null);
   const { marketplaceData, metadata, isLoading: nftLoading } = useNFTData(id);
   const { address } = useAccount();
-  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
-
-  const handleopenDispute = async () => {
-    if (writeContractAsync) {
-      try {
-        await writeContractAsync(
-          {
-            functionName: "openDispute",
-            args: [BigInt(id)],
-          },
-          {
-            onBlockConfirmation: txnReceipt => {
-              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-            },
-          },
-        );
-      } catch (e: any) {
-        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
-      }
-    }
-  };
+ 
+ 
 
   useEffect(() => {
     console.log({ ...marketplaceData, ...metadata });
@@ -478,8 +482,11 @@ function ListingNFt({ id }: { id: string }) {
         )}
       </td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 space-x-2">
-        {nft?.payedFor && nft.payer == address && !nft.payerChecked ? (
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+        {nft?.payedFor && nft.buyer == address && !nft.buyerChecked ? (
+          <button 
+          onClick={() => handleopenDispute(id, address == nft?.buyer)}
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+              
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -500,7 +507,7 @@ function ListingNFt({ id }: { id: string }) {
         ) : (
           !nft?.buyerChecked && (
             <button
-              disabled
+              onClick={() => handleopenDispute(id, address == nft?.buyer)}
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
             >
               <svg
@@ -522,7 +529,7 @@ function ListingNFt({ id }: { id: string }) {
             </button>
           )
         )}
-        {nft?.payedFor && nft.buyerChecked && nft.payerChecked && nft.payer != address ? (
+        {nft?.payedFor && nft.buyerChecked && nft.sellerChecked && nft.owner != address ? (
           <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -567,8 +574,8 @@ function ListingNFt({ id }: { id: string }) {
           )
         )}
         {
-          nft?.payedFor && (<button
-            onClick={handleopenDispute}
+          nft?.payedFor && nft.owner == address && !nft.buyerChecked || nft?.payedFor && nft.buyer == address && !nft.sellerChecked && (<button
+            onClick={() => handleopenDispute(id)}
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
           >
             <svg

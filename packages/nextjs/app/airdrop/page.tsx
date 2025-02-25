@@ -3,28 +3,29 @@
 import React from "react";
 import { useAccount, useWriteContract } from "wagmi";
 import DeployedContracts from "~~/contracts/deployedContracts";
-import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork, useTransactor } from "~~/hooks/scaffold-eth";
 
 function Page() {
   const { address: userAddress } = useAccount();
   const writeTxn = useTransactor();
+  const {targetNetwork} = useTargetNetwork();
   // getAirdropYAR
   const { writeContractAsync } = useWriteContract();
 
   const handleGetAirdrop = async () => {
-    // if (writeContractAsync) {
-    //   // try {
-    //   //   const makeWriteWithParams = () =>
-    //   //     writeContractAsync({
-    //   //       address: DeployedContracts[4157].CropCoin.address,
-    //   //       abi: DeployedContracts[4157].CropCoin.abi,
-    //   //       functionName: "getAirdrop",
-    //   //     });
-    //   //   await writeTxn(makeWriteWithParams);
-    //   // } catch (e: any) {
-    //   //   console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
-    //   // }
-    // }
+    if (writeContractAsync) {
+      try {
+        const makeWriteWithParams = () =>
+          writeContractAsync({
+            address: DeployedContracts[31337].CropCoin.address,
+            abi: DeployedContracts[31337].CropCoin.abi,
+            functionName: "getAirdrop",
+          });
+        await writeTxn(makeWriteWithParams);
+      } catch (e: any) {
+        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+      }
+    }
   };
   return (
     <div>

@@ -9,8 +9,8 @@ export const metadata = getMetadata({ title: "Agro NFT Marketplace", description
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning>
-      <body>
-        <ThemeProvider enableSystem>
+      <body className=" font-[Inter]">
+        <ThemeProvider enableSystem themes={["light", "dark"]}>
           <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
         </ThemeProvider>
       </body>

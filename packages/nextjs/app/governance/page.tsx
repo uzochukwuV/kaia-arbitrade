@@ -2,11 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import { LoaderIcon } from "react-hot-toast";
+import { formatEther } from "viem";
 import { useAccount, useWriteContract } from "wagmi";
 import DeployedContracts from "~~/contracts/deployedContracts";
 import { useScaffoldReadContract, useTargetNetwork, useTransactor } from "~~/hooks/scaffold-eth";
 
 function Governance() {
+  const { address: userAddress } = useAccount();
+  const { data, isFetching } = useScaffoldReadContract({
+    contractName: "CropCoin",
+    functionName: "balanceOf",
+    args: [userAddress],
+  });
   enum TabState {
     Dashboard,
     Dispute,
@@ -18,9 +25,14 @@ function Governance() {
   return (
     <div>
       <div className="container mx-auto p-6">
-        <div className="mb-8">
+        <div className="mb-8 flex justify-between items-center">
+          <div>
           <h1 className="text-3xl font-bold mb-2">CropSwap Governance</h1>
           <p className="text-muted-foreground">Participate in dispute resolution and earn rewards</p>
+          </div>
+          <div className="text-lg font-semibold text-black">
+            Crop Balance : {isFetching || data == undefined ? <LoaderIcon /> : formatEther(data!) } CROP
+          </div>
         </div>
         <div dir="ltr" data-orientation="horizontal" className="space-y-4">
           <div
@@ -106,12 +118,14 @@ function Governance() {
 export default Governance;
 
 function ActiveDispute() {
-  // const { address: userAddress } = useAccount();
-  // const {data, error, isFetching, isLoading }= useScaffoldReadContract({
-  //         contractName: "CropMarketplace",
-  //         functionName:  "getAllUserNFT",
-  //         args:[userAddress],
-  // })
+  const { address: userAddress } = useAccount();
+  const {data, error, isFetching, isLoading }= useScaffoldReadContract({
+          contractName: "CropMarketplace",
+          functionName:  "getAllDisputes",
+     
+  })
+
+  console.log(data)
 
   return (
     <div>
@@ -122,52 +136,70 @@ function ActiveDispute() {
         </div>
         <div className="p-6 pt-0">
           <div className="space-y-4">
-            <div className="rounded-lg border p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-triangle-alert h-4 w-4 text-yellow-500"
-                  >
-                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
-                    <path d="M12 9v4"></path>
-                    <path d="M12 17h.01"></path>
-                  </svg>
-                  <span className="font-medium">Dispute #123</span>
-                </div>
-                <div
-                  className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80"
-                  data-v0-t="badge"
-                >
-                  Open for Voting
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">NFT ID: #456 | Amount: 1000 CROP</p>
-                <div className="flex gap-2">
-                  <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                    Vote for Buyer
-                  </button>
-                  <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                    Vote for Seller
-                  </button>
-                </div>
-              </div>
-            </div>
+           {
+            data && data.map((dispute) => {
+              return <Disputes key={dispute} dispute={dispute} />
+            })
+           }
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+
+const Disputes = ({dispute}:{dispute:bigint})=>{
+  const { address: userAddress } = useAccount();
+  const {data, error, isFetching, isLoading }= useScaffoldReadContract({
+          contractName: "CropMarketplace",
+          functionName:  "getDisputeData",
+          args:[dispute]
+     
+  })
+
+  return  <div className="rounded-lg border p-4">
+  <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="lucide lucide-triangle-alert h-4 w-4 text-yellow-500"
+      >
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+        <path d="M12 9v4"></path>
+        <path d="M12 17h.01"></path>
+      </svg>
+      <span className="font-medium">Dispute #123</span>
+    </div>
+    <div
+      className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80"
+      data-v0-t="badge"
+    >
+      Open for Voting
+    </div>
+  </div>
+  <div className="space-y-2">
+    <p className="text-sm text-muted-foreground">NFT ID: #456 | Amount: 1000 CROP</p>
+    <div className="flex gap-2">
+      <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+        Vote for Buyer
+      </button>
+      <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+        Vote for Seller
+      </button>
+    </div>
+  </div>
+</div>
+}
+
 
 function History() {
   return (
@@ -233,8 +265,20 @@ function Dashboard() {
     console.log(data);
   });
 
-  const handleBecomeResolver = async () => {
+  const handleBecomeResolver = async (e:React.MouseEvent<HTMLButtonElement>) => {
     if (writeContractAsync) {
+      try {
+        const makeWriteWithParams = () =>
+          writeContractAsync({
+            address: DeployedContracts[4157].CropCoin.address,
+            abi: DeployedContracts[4157].CropCoin.abi,
+            functionName: "approve",
+            args: [DeployedContracts[4157].CropMarketplace.address, BigInt(1000)],
+          });
+        await writeTxn(makeWriteWithParams);
+      } catch (e: any) {
+        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+      }
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
@@ -284,14 +328,14 @@ function Dashboard() {
                   <LoaderIcon />
                 ) : data?.isResolver ? (
                   <div
-                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
+                    className="inline-flex bg-green-800 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
                     data-v0-t="badge"
                   >
                     Registered
                   </div>
                 ) : (
                   <div
-                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
+                    className="inline-flex bg-blue-500 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
                     data-v0-t="badge"
                   >
                     Not Registered
@@ -359,12 +403,13 @@ function Dashboard() {
           <div className="p-6 pt-0 space-y-4">
             <div className="space-y-2">
               <input
-                onClick={handleBecomeResolver}
+                value={1000}
+                
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Amount to stake (min. 1000 CROP)"
                 type="number"
               />
-              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+              <button onClick={handleBecomeResolver} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
                 Register as Resolver
               </button>
             </div>

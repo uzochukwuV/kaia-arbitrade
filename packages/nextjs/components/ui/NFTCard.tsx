@@ -13,10 +13,10 @@ const NFTCard: FC<NFTCardProps> = ({
   price,
   owner,
   description,
-  payer,
+  buyer,
   payedFor,
   booked,
-  payerChecked,
+  sellerChecked,
   buyerChecked,
   quantity,
   harvestDate,
@@ -31,7 +31,7 @@ const NFTCard: FC<NFTCardProps> = ({
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[4157].CropMarketplace.address, parseEther("2.5")],
+          args: [DeployedContracts[31337].CropMarketplace.address, parseEther("2.5")],
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -47,7 +47,7 @@ const NFTCard: FC<NFTCardProps> = ({
         await writeContractAsync(
           {
             functionName: "payForStock",
-            args: [BigInt(id)],
+            args: [BigInt(id), false],
           },
           {
             onBlockConfirmation: txnReceipt => {
@@ -82,7 +82,7 @@ const NFTCard: FC<NFTCardProps> = ({
   };
 
   const handleMarkasDelivered = async () => {
-    const isPayer = payer == connectedAddress;
+    const isPayer = buyer == connectedAddress;
     if (writeContractAsync) {
       try {
         await writeContractAsync(
@@ -103,7 +103,7 @@ const NFTCard: FC<NFTCardProps> = ({
   };
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
+    <div className="rounded-lg *:font-mono border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
       <div className=" aspect-square relative bg-muted">
         <Image
           src={image!}
@@ -127,7 +127,14 @@ const NFTCard: FC<NFTCardProps> = ({
               )}
             </p>
           </div>
-          {price && <span className="text-sm font-semibold text-black">{formatEther(price)} Crop</span>}
+          {price &&  <div
+              className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80"
+              data-v0-t="badge"
+            >
+             <span></span>
+             <span className=" font-mono">{formatEther(price!)}CROP </span>
+              
+            </div>}
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <div
@@ -146,16 +153,16 @@ const NFTCard: FC<NFTCardProps> = ({
         <div className="mt-4 flex flex-wrap gap-2">
           {payedFor && <span className="px-2 py-1 bg-success/20 text-success rounded-full text-xs">Paid</span>}
           {booked && <span className="px-2 py-1 bg-warning/20 text-warning rounded-full text-xs">Booked</span>}
-          {payerChecked && (
-            <span className="px-2 py-1 bg-info/20 text-info rounded-full text-xs">Payer Verified ✓</span>
-          )}
           {buyerChecked && (
             <span className="px-2 py-1 bg-info/20 text-info rounded-full text-xs">Buyer Verified ✓</span>
           )}
-          {payerChecked && !buyerChecked && (
+          {sellerChecked && (
+            <span className="px-2 py-1 bg-info/20 text-info rounded-full text-xs">Seller Verified ✓</span>
+          )}
+          {buyerChecked && !sellerChecked && (
             <span className="px-2 py-1 bg-info/20 text-info rounded-full text-xs">Awaiting Owner Confirmation</span>
           )}
-          {!payerChecked && buyerChecked && (
+          {!buyerChecked && sellerChecked && (
             <span className="px-2 py-1 bg-info/20 text-info rounded-full text-xs">Awaiting Buyer Confirmation</span>
           )}
         </div>
@@ -187,24 +194,24 @@ const NFTCard: FC<NFTCardProps> = ({
             Buy Now ({formatEther(price)} ETH)
           </button>
         )}
-        {payer == connectedAddress && price && !payerChecked && payedFor && (
+        {buyer == connectedAddress && !buyerChecked && payedFor && (
           <button
             onClick={handleMarkasDelivered}
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
           >
-            Mark as Delivered ✓
+            Mark as Delivered 8✓
           </button>
         )}
-        {owner == connectedAddress && price && !buyerChecked && payedFor && (
+        {owner == connectedAddress  && !sellerChecked && payedFor && (
           <button
             onClick={handleMarkasDelivered}
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
           >
-            Mark as Delivered ✓
+            Mark as Deliveredn 7 ✓
           </button>
         )}
-        {(payerChecked && !buyerChecked) ||
-          (!payerChecked && buyerChecked && (
+        {(sellerChecked && !buyerChecked) ||
+          (!sellerChecked && buyerChecked && (
             <button
               onClick={() => {
                 console.log("dispute");
@@ -214,7 +221,7 @@ const NFTCard: FC<NFTCardProps> = ({
               Dispute
             </button>
           ))}
-        {payerChecked && buyerChecked && owner == connectedAddress && (
+        {buyerChecked && sellerChecked && owner == connectedAddress && (
           <button
             onClick={handleCollectPayment}
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"

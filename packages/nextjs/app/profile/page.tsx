@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import { LoaderIcon } from "react-hot-toast";
+import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { Crop } from "~~/components/ui/Crop";
 import { NFTState } from "~~/components/ui/NFTState";
@@ -44,6 +45,12 @@ function Profile() {
     return x;
   }
 
+    const { data:crop, isFetching: cropBalFetching } = useScaffoldReadContract({
+      contractName: "CropCoin",
+      functionName: "balanceOf",
+      args: [userAddress],
+    });
+
   useEffect(() => {
     if (error) {
       const parsedError = getParsedError(error);
@@ -73,6 +80,9 @@ function Profile() {
           <div>
             <h1 className="text-3xl font-bold mb-2">My NFTs</h1>
             <p className="text-muted-foreground">Manage your agricultural assets and listings</p>
+            <div className="text-sm text-black">
+              Crop Balance : {cropBalFetching || crop == undefined ? <LoaderIcon /> : formatEther(crop! as bigint)} CropCoin
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <div

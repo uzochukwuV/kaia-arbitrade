@@ -23,10 +23,10 @@ export function NFTState({ id }: { id: string }) {
       price={BigInt(nft?.price || 0)}
       image={nft?.image}
       owner={nft?.owner}
-      payer={nft?.payer}
+      buyer={nft?.buyer}
       payedFor={nft?.payedFor}
       booked={nft?.booked}
-      payerChecked={nft?.payerChecked}
+      sellerChecked={nft?.sellerChecked}
       buyerChecked={nft?.buyerChecked}
       quantity={nft?.quantity}
       harvestDate={nft?.harvestDate}
