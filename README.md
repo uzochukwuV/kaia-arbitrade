@@ -2,6 +2,9 @@
 
 CrossFi is a fully decentralized Web3 marketplace built on the **CrossFi Blockchain**. It allows users to create on-chain stores, tokenize products as NFTs (both physical and digital), and utilize an escrow-based payment system for secure transactions. Governance-driven dispute resolution ensures fairness and trust in every trade.
 
+
+[![CrossFi Marketplace Demo](https://img.youtube.com/vi/f5GrkS01lNY/0.jpg)](https://www.youtube.com/watch?v=f5GrkS01lNY)
+
 ## Table of Contents
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -105,4 +108,3 @@ This project is licensed under the MIT License.
 
 ---
 Built with ❤️ on CrossFi Blockchain.
-
