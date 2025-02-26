@@ -52,6 +52,9 @@ const deployAgriMarketplace: DeployFunction = async function (hre: HardhatRuntim
     // Contract constructor arguments
     args: [
       deployer,
+      "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90",
+      "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
+      "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f"
     ],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
