@@ -65,6 +65,12 @@ yarn deploy --network kaia
 | ⏳ **Escrow holding** | `escrow` |
 | ✅ **Complete trade** | `finalize` |
 
+
+Coin 0x947B6EC2Ed9d900b0F6a5F5EF6E3Dc93Dd521243
+Market 0x5c602C98Ad2434c86D83f956bF3B22323dDe7f85
+NFT 0x5972098A9de3CeA8d46f2A773B37260c22B8Ec7B
+
+
 ## Roadmap 🛣
 - ✅ MVP launch on Kaia Network
 - 🔄 Cross-chain integration with major networks
