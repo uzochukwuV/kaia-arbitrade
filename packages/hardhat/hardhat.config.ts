@@ -85,6 +85,10 @@ const config: HardhatUserConfig = {
       url: `https://rpc.testnet.ms`,
       accounts: [deployerPrivateKey],
     },
+    kairos: {
+      url: `https://public-en-kairos.node.kaia.io`,
+      accounts: [deployerPrivateKey],
+    },
     optimismSepolia: {
       url: `https://opt-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],

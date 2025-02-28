@@ -22,11 +22,11 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
   sellerChecked,
   buyerChecked,
   quantity,
-  harvestDate,
+  date,
   tags,
   onClick,
 }) => {
-  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
+  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "KaiMarket" });
   const { address: connectedAddress } = useAccount();
   const chainId = useChainId()
   const { writeContractAsync: Approve, isPending: pendingApprove } = useScaffoldWriteContract({
@@ -37,7 +37,7 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[4157].CropMarketplace.address, parseEther(price!.toString())],
+          args: [DeployedContracts[1001].KaiMarket.address, parseEther(price!.toString())],
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -135,7 +135,7 @@ export const MarketNFTCARD: FC<NFTCardProps> = ({
             >
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
-            {harvestDate} {quantity}
+            {date} {quantity}
           </div>
           <button
             onClick={handleSubmit}

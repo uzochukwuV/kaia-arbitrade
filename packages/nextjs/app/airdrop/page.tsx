@@ -17,8 +17,8 @@ function Page() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[4157].CropCoin.address,
-            abi: DeployedContracts[4157].CropCoin.abi,
+            address: DeployedContracts[1001].KaiCoin.address,
+            abi: DeployedContracts[1001].KaiCoin.abi,
             functionName: "getAirdrop",
           });
         await writeTxn(makeWriteWithParams);

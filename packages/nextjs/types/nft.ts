@@ -11,7 +11,7 @@ export interface NFTCardProps {
   sellerChecked?: boolean;
   buyerChecked?: boolean;
   quantity?: number | string;
-  harvestDate?: string;
+  date?: string;
   tags?: string;
   disputed?: boolean;
   onClick?: () => void;
@@ -22,7 +22,7 @@ export interface NFTMetaData {
   image?: string | undefined;
   description?: string;
   quantity?: number | string;
-  harvestDate?: string;
+  date?: string;
   tags?: string;
 }
 

@@ -18,25 +18,25 @@ export default function Dashboard() {
 
   const { address: userAddress } = useAccount();
   const { data: trade, isFetching: tradeLoading } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "get_user_listing",
     args: [BigInt(10), userAddress],
   });
 
   const { data: purchase, isFetching } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "get_user_purchase",
     args: [BigInt(10), userAddress],
   });
 
   const { data:crop, isFetching: cropBalFetching } = useScaffoldReadContract({
-        contractName: "CropCoin",
+        contractName: "KaiCoin",
         functionName: "balanceOf",
         args: [userAddress],
       });
 
 
-  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
+  const { data: result, isPending, writeContractAsync } = useScaffoldWriteContract({ contractName: "KaiMarket" });
 
   const handleopenDispute = async (id:string) => {
     if (writeContractAsync) {
@@ -82,18 +82,18 @@ export default function Dashboard() {
     <div>
       <div className="container mx-auto p-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">CropSwap Dashboard</h1>
-          <p className="text-muted-foreground">Manage your listings, purchases, and sales</p>
+          <h1 className="text-3xl font-bold mb-2">Digital Marketplace Dashboard</h1>
+          <p className="text-muted-foreground">Manage your digital assets, purchases, and sales</p>
           <div>
             <div className="text-sm text-black">
-              Crop Balance : {cropBalFetching || crop == undefined ? <LoaderIcon /> : formatEther(crop! as bigint)} CropCoin
+              Balance: {cropBalFetching || crop == undefined ? <LoaderIcon /> : formatEther(crop! as bigint)} Credits
             </div>
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
             <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Active Listings</h3>
+              <h3 className="tracking-tight text-sm font-medium">Listed Items</h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -104,13 +104,9 @@ export default function Dashboard() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-store h-4 w-4 text-muted-foreground"
+                className="h-4 w-4 text-muted-foreground"
               >
-                <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
-                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
-                <path d="M2 7h20"></path>
-                <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"></path>
+                <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
               </svg>
             </div>
             <div className="p-6 pt-0">
@@ -119,7 +115,7 @@ export default function Dashboard() {
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
             <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Pending Sales</h3>
+              <h3 className="tracking-tight text-sm font-medium">Pending Deliveries</h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -130,12 +126,10 @@ export default function Dashboard() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-package h-4 w-4 text-muted-foreground"
+                className="h-4 w-4 text-muted-foreground"
               >
-                <path d="m7.5 4.27 9 5.15"></path>
-                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
-                <path d="m3.3 7 8.7 5 8.7-5"></path>
-                <path d="M12 22V12"></path>
+                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
               </svg>
             </div>
             <div className="p-6 pt-0">
@@ -144,7 +138,7 @@ export default function Dashboard() {
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
             <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Active Purchases</h3>
+              <h3 className="tracking-tight text-sm font-medium">Active Orders</h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -155,11 +149,11 @@ export default function Dashboard() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-shopping-cart h-4 w-4 text-muted-foreground"
+                className="h-4 w-4 text-muted-foreground"
               >
-                <circle cx="8" cy="21" r="1"></circle>
-                <circle cx="19" cy="21" r="1"></circle>
-                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                <path d="M3 6h18"></path>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
               </svg>
             </div>
             <div className="p-6 pt-0">
@@ -168,7 +162,7 @@ export default function Dashboard() {
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
             <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Open Disputes</h3>
+              <h3 className="tracking-tight text-sm font-medium">Support Tickets</h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -179,11 +173,10 @@ export default function Dashboard() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-circle-alert h-4 w-4 text-muted-foreground"
+                className="h-4 w-4 text-muted-foreground"
               >
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" x2="12" y1="8" y2="12"></line>
-                <line x1="12" x2="12.01" y1="16" y2="16"></line>
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
               </svg>
             </div>
             <div className="p-6 pt-0">
@@ -191,65 +184,41 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div dir="ltr" data-orientation="horizontal" className="space-y-4">
-          <div
-            role="tablist"
-            aria-orientation="horizontal"
-            className="inline-flex h-10 items-center justify-center rounded-md bg-slate-200 p-1 outline-none text-muted-foreground"
-            tabIndex={0}
-            data-orientation="horizontal"
-          >
+
+        <div className="space-y-4">
+          <div className="flex items-center space-x-4 bg-slate-100 p-4 rounded-lg">
             <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="radix-:r0:-content-listings"
-              data-state="inactive"
-              id="radix-:r0:-trigger-listings"
-              className="inline-flex items-center bg-slate-50 justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              tabIndex={-1}
               onClick={() => setTab(TabState.Listings)}
+              className={`px-4 py-2 rounded-md transition-all ${
+                tab === TabState.Listings ? 'bg-white shadow-sm text-primary' : 'text-gray-600'
+              }`}
             >
               My Sales
             </button>
             <button
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="radix-:r0:-content-purchases"
-              data-state="inactive"
-              id="radix-:r0:-trigger-purchases"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              tabIndex={-1}
               onClick={() => setTab(TabState.Purchases)}
-              data-orientation="horizontal"
+              className={`px-4 py-2 rounded-md transition-all ${
+                tab === TabState.Purchases ? 'bg-white shadow-sm text-primary' : 'text-gray-600'
+              }`}
             >
               My Purchases
             </button>
           </div>
-          <div
-            data-state="inactive"
-            role="tabpanel"
-            aria-labelledby="radix-:r0:-trigger-listings"
-            id="radix-:r0:-content-listings"
-            tabIndex={0}
-            className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          ></div>
-          <div
-            data-state="inactive"
-            role="tabpanel"
-            aria-labelledby="radix-:r0:-trigger-purchases"
-            id="radix-:r0:-content-purchases"
-            tabIndex={0}
-            className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          ></div>
-          {
-            //
-          }
+
           {tab === TabState.Listings ? (
-            <ActiveListing data={trade} isLoading={tradeLoading} handleConfirmDelivery={handleConfirmDelivery}  handleopenDispute={handleopenDispute} />
+            <ActiveListing 
+              data={trade} 
+              isLoading={tradeLoading} 
+              handleConfirmDelivery={handleConfirmDelivery}  
+              handleopenDispute={handleopenDispute} 
+            />
           ) : (
-            <Purchases data={purchase} isLoading={isFetching} handleConfirmDelivery={handleConfirmDelivery} handleopenDispute={handleopenDispute} />
+            <Purchases 
+              data={purchase} 
+              isLoading={isFetching} 
+              handleConfirmDelivery={handleConfirmDelivery} 
+              handleopenDispute={handleopenDispute} 
+            />
           )}
         </div>
       </div>
@@ -257,53 +226,52 @@ export default function Dashboard() {
   );
 }
 
-function Purchases({ data, isLoading, handleopenDispute, handleConfirmDelivery }: {handleConfirmDelivery:any, data: readonly bigint[] | undefined; isLoading: boolean, handleopenDispute:any }) {
+function Purchases({ data, isLoading, handleopenDispute, handleConfirmDelivery }: {
+  handleConfirmDelivery: any, 
+  data: readonly bigint[] | undefined; 
+  isLoading: boolean, 
+  handleopenDispute: any 
+}) {
   return (
-    <div>
-      <div
-        data-state="active"
-        role="tabpanel"
-        aria-labelledby="radix-:r0:-trigger-purchases"
-        id="radix-:r0:-content-purchases"
-        tabIndex={0}
-        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-      >
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-          <div className="flex flex-col space-y-1.5 p-6">
-            <h3 className="text-2xl font-semibold leading-none tracking-tight">My Purchases</h3>
-            <p className="text-sm text-muted-foreground">Track your purchases and confirm deliveries</p>
-          </div>
-          <div className="p-6 pt-0">
-            <div className="relative w-full overflow-auto">
-              <table className="w-full caption-bottom text-sm">
-                <thead className="[&amp;_tr]:border-b">
-                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      NFT ID
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Price Paid
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Status
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="[&amp;_tr:last-child]:border-0">
-                  {!isLoading &&
-                    data?.map(i => {
-                      if (i == BigInt(0)) {
-                        return "";
-                      }
-                      return <PurchaseNFts id={i.toString()} key={i.toString()} handleopenDispute={handleopenDispute} handleConfirmDelivery={handleConfirmDelivery} />;
-                    })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+    <div className="bg-white rounded-lg shadow-sm border">
+      <div className="p-6">
+        <h3 className="text-2xl font-semibold mb-2">My Purchases</h3>
+        <p className="text-sm text-gray-500">Track your orders and delivery status</p>
+      </div>
+      <div className="p-6 pt-0">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Item ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {!isLoading &&
+                data?.map(i => {
+                  if (i == BigInt(0)) return null;
+                  return (
+                    <PurchaseNFts 
+                      id={i.toString()} 
+                      key={i.toString()} 
+                      handleopenDispute={handleopenDispute} 
+                      handleConfirmDelivery={handleConfirmDelivery} 
+                    />
+                  );
+                })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -324,106 +292,90 @@ function PurchaseNFts({ id, handleopenDispute, handleConfirmDelivery }: { id: st
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium">#{id}</td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
-        {nft?.price?.toString() && formatEther(nft?.price) || ""} CROP
+      {nft?.price?.toString() && formatEther(nft?.price) || ""} CROP
       </td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
-        <div
-          className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
-          data-v0-t="badge"
-        >
-          Pending Delivery
+      {nft?.buyerChecked && nft?.sellerChecked ? (
+        <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground bg-green-50">
+        Delivered
         </div>
+      ) : (
+        <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground">
+        Pending Delivery
+        </div>
+      )}
       </td>
       <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 space-x-2">
-        {nft?.payedFor && nft.owner == address && !nft.sellerChecked || nft?.payedFor && nft.buyer == address && !nft.buyerChecked  ? (
-          <button onClick={()=>handleConfirmDelivery(id,address==nft.buyer )} className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-circle-check h-4 w-4 mr-2"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="m9 12 2 2 4-4"></path>
-            </svg>
-            Confirm Delivery
-          </button>
-        ) : (
-          <button className="inline-flex items-center justify-center gap-2 bg-green-200 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-circle-check h-4 w-4 mr-2"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="m9 12 2 2 4-4"></path>
-            </svg>
-            Delivery Confirmed
-          </button>
-        )}
-        {nft?.payedFor && nft.owner == address && !nft.buyerChecked || nft?.payedFor && nft.buyer == address && !nft.sellerChecked && !nft.disputed && (
-          <button
-            onClick={() => handleopenDispute(id)}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-circle-alert h-4 w-4 mr-2"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" x2="12" y1="8" y2="12"></line>
-              <line x1="12" x2="12.01" y1="16" y2="16"></line>
-            </svg>
-            Open Dispute
-          </button>
-        )}
+      {nft?.payedFor && !nft.buyerChecked && address == nft.buyer && (
+        <button 
+        onClick={() => handleConfirmDelivery(id, true)}
+        className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-circle-check h-4 w-4 mr-2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+        Confirm Delivery
+        </button>
+      )}
 
-        {
-          nft?.disputed && (
-            <button
-              className="inline-flex items-center bg-red-500 text-white  justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-circle-alert h-4 w-4 mr-2"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" x2="12" y1="8" y2="12"></line>
-                <line x1="12" x2="12.01" y1="16" y2="16"></line>
-              </svg>
-              Dispute Opened (Awaiting Resolution)
-            </button>
-          ) 
-        }
+      {nft?.payedFor && !nft.disputed && !nft.buyerChecked && address == nft.buyer && (
+        <button
+        onClick={() => handleopenDispute(id)}
+        className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-circle-alert h-4 w-4 mr-2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" x2="12" y1="8" y2="12"></line>
+          <line x1="12" x2="12.01" y1="16" y2="16"></line>
+        </svg>
+        Open Dispute
+        </button>
+      )}
+
+      {nft?.disputed && (
+        <div className="inline-flex items-center bg-red-500 text-white justify-center gap-2 whitespace-nowrap text-sm font-medium px-3 py-2 rounded-md">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-circle-alert h-4 w-4 mr-2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" x2="12" y1="8" y2="12"></line>
+          <line x1="12" x2="12.01" y1="16" y2="16"></line>
+        </svg>
+        Dispute Opened
+        </div>
+      )}
       </td>
     </tr>
   );
@@ -431,52 +383,45 @@ function PurchaseNFts({ id, handleopenDispute, handleConfirmDelivery }: { id: st
 
 function ActiveListing({ data, isLoading, handleopenDispute,handleConfirmDelivery }: {handleConfirmDelivery:any, data: readonly bigint[] | undefined; isLoading: boolean, handleopenDispute:any }) {
   return (
-    <div>
-      <div
-        data-state="active"
-        role="tabpanel"
-        aria-labelledby="radix-:r0:-trigger-listings"
-        id="radix-:r0:-content-listings"
-        tabIndex={0}
-        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-      >
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-          <div className="flex flex-col space-y-1.5 p-6">
-            <h3 className="text-2xl font-semibold leading-none tracking-tight">Active Listings</h3>
-            <p className="text-sm text-muted-foreground">Manage your listed NFTs and their status</p>
-          </div>
-          <div className="p-6 pt-0">
-            <div className="relative w-full overflow-auto">
-              <table className="w-full caption-bottom text-sm">
-                <thead className="[&amp;_tr]:border-b">
-                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      NFT ID
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Price
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Status
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="[&amp;_tr:last-child]:border-0">
-                  {!isLoading &&
-                    data?.map(i => {
-                      if (i == BigInt(0)) {
-                        return "";
-                      }
-
-                      return <ListingNFt id={i.toString()} key={i.toString()} handleopenDispute={handleopenDispute} handleConfirmDelivery={handleConfirmDelivery} />;
-                    })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+    <div className="bg-white rounded-lg shadow-sm border">
+      <div className="p-6">
+        <h3 className="text-2xl font-semibold mb-2">Active Listings</h3>
+        <p className="text-sm text-gray-500">Manage your listed NFTs and their status</p>
+      </div>
+      <div className="p-6 pt-0">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  NFT ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {!isLoading &&
+                data?.map(i => {
+                  if (i == BigInt(0)) return null;
+                  return (
+                    <ListingNFt 
+                      id={i.toString()} 
+                      key={i.toString()} 
+                      handleopenDispute={handleopenDispute} 
+                      handleConfirmDelivery={handleConfirmDelivery}
+                    />
+                  );
+                })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

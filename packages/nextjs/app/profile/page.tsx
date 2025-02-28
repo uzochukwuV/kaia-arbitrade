@@ -16,19 +16,19 @@ function Profile() {
   const [totalNft, setTotalNft] = useState(0);
 
   const { data, error, isFetching, isLoading } = useScaffoldReadContract({
-    contractName: "CropNft",
+    contractName: "KaiNFT",
     functionName: "getAllUserNFT",
     args: [userAddress],
   });
 
   const { data: trade, isFetching: tradeLoading } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "get_user_listing",
     args: [BigInt(10), userAddress],
   });
 
   const { data: purchase, isFetching: purchaseLoading } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "get_user_purchase",
     args: [BigInt(10), userAddress],
   });
@@ -46,7 +46,7 @@ function Profile() {
   }
 
     const { data:crop, isFetching: cropBalFetching } = useScaffoldReadContract({
-      contractName: "CropCoin",
+      contractName: "KaiCoin",
       functionName: "balanceOf",
       args: [userAddress],
     });
@@ -217,7 +217,7 @@ function Profile() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {/*  */}
-              {!isFetching && data?.map(i => <Crop id={i} key={i} />)}
+              {!isFetching && data?.map((i) => <Crop id={i} key={i} />)}
 
               {!tradeLoading &&
                 trade?.map(i => {

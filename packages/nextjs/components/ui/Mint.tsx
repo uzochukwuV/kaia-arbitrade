@@ -65,8 +65,8 @@ export default function NFTMintingForm() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[4157].CropNft.address,
-            abi: DeployedContracts[4157].CropNft.abi,
+            address: DeployedContracts[1001].KaiCoin.address,
+            abi: DeployedContracts[1001].KaiCoin.abi,
             functionName: "safeMint",
             args: [connectedAddress!, url],
           });
@@ -139,10 +139,10 @@ export default function NFTMintingForm() {
         </div>
         <div>
           <label htmlFor="havestDate" className="block text-sm font-medium text-[#222] mb-1">
-            havestDate
+            Date
           </label>
           <input
-            id="havestDate"
+            id="date"
             value={havestDate}
             onChange={e => setHavestDate(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-slate-200 bg-opacity-20 text-[#222] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"

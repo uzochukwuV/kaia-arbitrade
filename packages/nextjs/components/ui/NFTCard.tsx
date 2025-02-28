@@ -19,20 +19,20 @@ const NFTCard: FC<NFTCardProps> = ({
   sellerChecked,
   buyerChecked,
   quantity,
-  harvestDate,
+  date,
   tags,
   disputed,
   onClick,
 }) => {
-  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
+  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "KaiMarket" });
   const { address: connectedAddress } = useAccount();
-  const { writeContractAsync: Approve } = useScaffoldWriteContract({ contractName: "CropCoin" });
+  const { writeContractAsync: Approve } = useScaffoldWriteContract({ contractName: "KaiCoin" });
   const handleSubmit = async () => {
     try {
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[4157].CropMarketplace.address, parseEther("2.5")],
+          args: [DeployedContracts[1001].KaiMarket.address, parseEther("2.5")],
         },
         {
           onBlockConfirmation: txnReceipt => {

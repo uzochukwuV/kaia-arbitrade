@@ -11,7 +11,7 @@ import { useScaffoldReadContract, useScaffoldWriteContract, useTargetNetwork, us
 function Governance() {
   const { address: userAddress } = useAccount();
   const { data, isFetching } = useScaffoldReadContract({
-    contractName: "CropCoin",
+    contractName: "KaiCoin",
     functionName: "balanceOf",
     args: [userAddress],
   });
@@ -26,91 +26,91 @@ function Governance() {
   return (
     <div>
       <div className="container mx-auto p-6">
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">CropSwap Governance</h1>
-            <p className="text-muted-foreground">Participate in dispute resolution and earn rewards</p>
-          </div>
-          <div className="text-lg font-semibold text-black">
-            Crop Balance : {isFetching || data == undefined ? <LoaderIcon /> : formatEther(data!)} CROP
-          </div>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+        <h1 className="text-3xl font-bold mb-2">Marketplace Governance</h1>
+        <p className="text-muted-foreground">Participate in dispute resolution and earn rewards</p>
         </div>
-        <div dir="ltr" data-orientation="horizontal" className="space-y-4">
-          <div
-            role="tablist"
-            aria-orientation="horizontal"
-            className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 outline-none text-muted-foreground"
-            tabIndex={0}
-            data-orientation="horizontal"
-          >
-            <button
-              onClick={() => setTab(TabState.Dashboard)}
-              type="button"
-              role="tab"
-              aria-selected="true"
-              aria-controls="radix-:r0:-content-resolver"
-              data-state="active"
-              id="radix-:r0:-trigger-resolver"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              tabIndex={0}
-              data-orientation="horizontal"
-              data-radix-collection-item=""
-            >
-              Resolver Dashboard
-            </button>
-            <button
-              onClick={() => setTab(TabState.Dispute)}
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="radix-:r0:-content-disputes"
-              data-state="inactive"
-              id="radix-:r0:-trigger-disputes"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              tabIndex={-1}
-              data-orientation="horizontal"
-              data-radix-collection-item=""
-            >
-              Active Disputes
-            </button>
-            <button
-              onClick={() => setTab(TabState.History)}
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="radix-:r0:-content-history"
-              data-state="inactive"
-              id="radix-:r0:-trigger-history"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              tabIndex={-1}
-              data-orientation="horizontal"
-              data-radix-collection-item=""
-            >
-              History
-            </button>
-          </div>
-
-          {tab === TabState.Dashboard ? <Dashboard /> : tab === TabState.Dispute ? <ActiveDispute /> : <History />}
-
-          <div
-            data-state="inactive"
-            data-orientation="horizontal"
-            role="tabpanel"
-            aria-labelledby="radix-:r0:-trigger-disputes"
-            id="radix-:r0:-content-disputes"
-            tabIndex={0}
-            className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
-          ></div>
-          <div
-            data-state="inactive"
-            data-orientation="horizontal"
-            role="tabpanel"
-            aria-labelledby="radix-:r0:-trigger-history"
-            id="radix-:r0:-content-history"
-            tabIndex={0}
-            className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
-          ></div>
+        <div className="text-lg font-semibold text-black">
+        Token Balance: {isFetching || data == undefined ? <LoaderIcon /> : formatEther(data!)} KAI
         </div>
+      </div>
+      <div dir="ltr" data-orientation="horizontal" className="space-y-4">
+        <div
+        role="tablist"
+        aria-orientation="horizontal"
+        className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 outline-none text-muted-foreground"
+        tabIndex={0}
+        data-orientation="horizontal"
+        >
+        <button
+          onClick={() => setTab(TabState.Dashboard)}
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="radix-:r0:-content-resolver"
+          data-state="active"
+          id="radix-:r0:-trigger-resolver"
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+          tabIndex={0}
+          data-orientation="horizontal"
+          data-radix-collection-item=""
+        >
+          Moderator Dashboard
+        </button>
+        <button
+          onClick={() => setTab(TabState.Dispute)}
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="radix-:r0:-content-disputes"
+          data-state="inactive"
+          id="radix-:r0:-trigger-disputes"
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+          tabIndex={-1}
+          data-orientation="horizontal"
+          data-radix-collection-item=""
+        >
+          Active Disputes
+        </button>
+        <button
+          onClick={() => setTab(TabState.History)}
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="radix-:r0:-content-history"
+          data-state="inactive"
+          id="radix-:r0:-trigger-history"
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+          tabIndex={-1}
+          data-orientation="horizontal"
+          data-radix-collection-item=""
+        >
+          History
+        </button>
+        </div>
+
+        {tab === TabState.Dashboard ? <Dashboard /> : tab === TabState.Dispute ? <ActiveDispute /> : <History />}
+
+        <div
+        data-state="inactive"
+        data-orientation="horizontal"
+        role="tabpanel"
+        aria-labelledby="radix-:r0:-trigger-disputes"
+        id="radix-:r0:-content-disputes"
+        tabIndex={0}
+        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+        ></div>
+        <div
+        data-state="inactive"
+        data-orientation="horizontal"
+        role="tabpanel"
+        aria-labelledby="radix-:r0:-trigger-history"
+        id="radix-:r0:-content-history"
+        tabIndex={0}
+        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+        ></div>
+      </div>
       </div>
     </div>
   );
@@ -121,7 +121,7 @@ export default Governance;
 function ActiveDispute() {
   const { address: userAddress } = useAccount();
   const { data, error, isFetching, isLoading } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "getAllDisputes",
 
   })
@@ -138,7 +138,7 @@ function ActiveDispute() {
         <div className="p-6 pt-0">
           <div className="space-y-4">
             {
-              data && data.map((dispute) => {
+              data && data.map((dispute: bigint) => {
                 return <Disputes key={dispute} dispute={dispute} />
               })
             }
@@ -153,14 +153,14 @@ function ActiveDispute() {
 const Disputes = ({ dispute }: { dispute: bigint }) => {
   const { address: userAddress } = useAccount();
   const { data, error, isFetching, isLoading } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "getDisputeData",
     args: [dispute]
 
   })
 
   const { isPending, writeContractAsync } = useScaffoldWriteContract({
-    contractName: "CropMarketplace"
+    contractName: "KaiMarket"
   })
   
   const handleResolve = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -321,7 +321,7 @@ function Dashboard() {
   const writeTxn = useTransactor();
 
   const { data, error, isFetching, isLoading } = useScaffoldReadContract({
-    contractName: "CropMarketplace",
+    contractName: "KaiMarket",
     functionName: "user_govern_data",
     args: [userAddress],
   });
@@ -335,8 +335,8 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[4157].CropMarketplace.address,
-            abi: DeployedContracts[4157].CropMarketplace.abi,
+            address: DeployedContracts[1001].KaiMarket.address,
+            abi: DeployedContracts[1001].KaiMarket.abi,
             functionName: "claimResolverReward",
           });
         await writeTxn(makeWriteWithParams);
@@ -351,10 +351,10 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[4157].CropCoin.address,
-            abi: DeployedContracts[4157].CropCoin.abi,
+            address: DeployedContracts[1001].KaiCoin.address,
+            abi: DeployedContracts[1001].KaiCoin.abi,
             functionName: "approve",
-            args: [DeployedContracts[4157].CropMarketplace.address, parseEther("1000")],
+            args: [DeployedContracts[1001].KaiMarket.address, parseEther("1000")],
           });
         await writeTxn(makeWriteWithParams);
       } catch (e: any) {
@@ -363,8 +363,8 @@ function Dashboard() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[4157].CropMarketplace.address,
-            abi: DeployedContracts[4157].CropMarketplace.abi,
+            address: DeployedContracts[1001].KaiMarket.address,
+            abi: DeployedContracts[1001].KaiMarket.abi,
             functionName: "registerResolver",
           });
         await writeTxn(makeWriteWithParams);

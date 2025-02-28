@@ -13,7 +13,7 @@ export function Crop({ id }: { id: bigint }) {
   const [nft, setNFt] = useState<NFTMetaData | null>();
   const [modal, setModal] = useState(false);
   const { data: connectedAddressNFT, isLoading: isConnectedAddressCounterLoading } = useScaffoldReadContract({
-    contractName: "CropNft",
+    contractName: "KaiNft",
     functionName: "tokenURI",
     args: [BigInt(id)],
   });
@@ -25,7 +25,7 @@ export function Crop({ id }: { id: bigint }) {
     if (connectedAddressNFT && !nft) {
       refetch();
     }
-    console.log(nftData);
+    console.log(nftData, connectedAddressNFT, id);
     if (nftData?.error) {
       refetch();
     }
@@ -33,14 +33,14 @@ export function Crop({ id }: { id: bigint }) {
       setNFt(nftData?.data?.data);
     }
   }, [isConnectedAddressCounterLoading, isLoading, connectedAddressNFT, nft]);
-  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "CropMarketplace" });
-  const { writeContractAsync: Approve } = useScaffoldWriteContract({ contractName: "CropNft" });
+  const { writeContractAsync } = useScaffoldWriteContract({ contractName: "KaiMarket" });
+  const { writeContractAsync: Approve } = useScaffoldWriteContract({ contractName: "KaiNFT" });
   // const { writeContractAsync:ApproveCoin } = useScaffoldWriteContract({contractName:"CropCoin"});
   // try {
   //   await ApproveCoin(
   //     {
   //       functionName: "approve",
-  //       args: [DeployedContracts[4157].CropMarketplace.address, parseEther("200")],
+  //       args: [DeployedContracts[4157].KaiMarket.address, parseEther("200")],
   //     },
   //     {
   //       onBlockConfirmation: txnReceipt => {
@@ -57,7 +57,7 @@ export function Crop({ id }: { id: bigint }) {
       await Approve(
         {
           functionName: "approve",
-          args: [DeployedContracts[4157].CropMarketplace.address, id],
+          args: [DeployedContracts[1001].KaiMarket.address, id],
         },
         {
           onBlockConfirmation: txnReceipt => {

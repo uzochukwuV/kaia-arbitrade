@@ -9,11 +9,11 @@ import { ERC721Burnable } from "@openzeppelin/contracts/token/ERC721/extensions/
 import { ERC721URIStorage } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CropNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
+contract KaiNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     uint256 private _nextTokenId = 1;
     mapping(address => uint) owners;
 
-    constructor(address initialOwner) ERC721("CropNft", "Cnt") Ownable(initialOwner) {}
+    constructor(address initialOwner) ERC721("KaiNFT", "KFT") Ownable(initialOwner) {}
 
     function safeMint(address to, string memory uri) public {
         uint256 tokenId = _nextTokenId++;

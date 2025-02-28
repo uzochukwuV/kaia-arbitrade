@@ -6,7 +6,7 @@ import { ERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/ERC2
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 
-contract CropCoin is ERC20, Ownable, ERC20Permit, Pausable {
+contract KaiCoin is ERC20, Ownable, ERC20Permit, Pausable {
     // Constants
     uint256 public constant AIRDROP_AMOUNT = 10000 * 10 ** 18;
     uint256 public constant INITIAL_SUPPLY = 20000 * 10 ** 18;

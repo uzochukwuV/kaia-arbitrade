@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       image: url,
       tags: tags,
       quantity: data.get("quantity")?.toString() || "",
-      harvestDate: data.get("harvestDate")?.toString() || "",
+      date: data.get("harvestDate")?.toString() || "",
     };
 
     const uploadJson = await pinata.upload.json(view);

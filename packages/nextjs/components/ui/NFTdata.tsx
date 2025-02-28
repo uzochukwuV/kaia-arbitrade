@@ -5,13 +5,13 @@ import { NFTMetaData } from "~~/types/nft";
 
 export function useNFTData(nftId: string) {
     const { data: tokenUri } = useScaffoldReadContract({
-      contractName: "CropNft",
+      contractName: "KaiNFT",
       functionName: "tokenURI",
       args: [BigInt(nftId)],
     });
   
     const { data: marketplaceData } = useScaffoldReadContract({
-      contractName: "CropMarketplace",
+      contractName: "KaiMarket",
       functionName: "get_stock_data",
       args: [BigInt(nftId)],
     });

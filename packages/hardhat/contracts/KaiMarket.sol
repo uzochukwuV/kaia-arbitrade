@@ -3,14 +3,14 @@ pragma solidity >=0.8.0 <0.9.0;
 
 // Useful for debugging. Remove when deploying to a live network.
 import "hardhat/console.sol";
-import "./CropNft.sol";
-import "./CropCoin.sol";
+import "./KaiNFT.sol";
+import "./KaiCoin.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract CropMarketplace {
+contract KaiMarket {
     address public immutable owner;
-    string public name = "CropSwap";
-    CropNft public nft;
+    string public name = "KaiMarket";
+    KaiNFT public nft;
     IERC20 public coin;
     IERC20 public governanceToken;
     mapping(uint128 => AssetData) public assets;
@@ -93,14 +93,14 @@ contract CropMarketplace {
     // constructor
     constructor( address _owner, address _nft, address _coin, address _governanceToken) {
         owner = _owner;
-        nft = CropNft(_nft);
+        nft = KaiNFT(_nft);
         coin = IERC20(_coin);
         governanceToken = IERC20(_governanceToken);
     }
 
     function updateNFTAddress(address _newNFT) external onlyOwner {
         emit TokenUpdated("NFT", address(nft), _newNFT);
-        nft = CropNft(_newNFT);
+        nft = KaiNFT(_newNFT);
     }
 
     function updateCoinAddress(address _newCoin) external onlyOwner {
@@ -119,7 +119,7 @@ contract CropMarketplace {
     function mintNFT(address to, string memory uri) external onlyOwner {
         // Optional: Add access control if needed
         nft.safeMint(to, uri);
-        // Assuming you add totalSupply to CropNft
+        // Assuming you add totalSupply to KaiNFT
     }
 
     // Function to get NFT metadata
@@ -269,6 +269,12 @@ contract CropMarketplace {
         }
         return ids;
     }
+
+
+
+    //  Dispute Resolution DAO
+    // @message
+    // opendispute -> voteondispute -> resolvedispute -> claimreward
 
     function openDispute(uint128 nftId) external {
         AssetData storage asset = assets[nftId];
