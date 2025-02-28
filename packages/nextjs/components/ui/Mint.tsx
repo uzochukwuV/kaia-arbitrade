@@ -65,8 +65,8 @@ export default function NFTMintingForm() {
       try {
         const makeWriteWithParams = () =>
           writeContractAsync({
-            address: DeployedContracts[1001].KaiCoin.address,
-            abi: DeployedContracts[1001].KaiCoin.abi,
+            address: DeployedContracts[1001].KaiNFT.address,
+            abi: DeployedContracts[1001].KaiNFT.abi,
             functionName: "safeMint",
             args: [connectedAddress!, url],
           });
