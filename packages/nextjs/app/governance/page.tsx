@@ -376,129 +376,130 @@ function Dashboard() {
   return (
     <div>
       <div
-        data-state="active"
-        data-orientation="horizontal"
-        role="tabpanel"
-        aria-labelledby="radix-:r0:-trigger-resolver"
-        id="radix-:r0:-content-resolver"
-        tabIndex={0}
-        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+      data-state="active"
+      data-orientation="horizontal"
+      role="tabpanel"
+      aria-labelledby="radix-:r0:-trigger-resolver"
+      id="radix-:r0:-content-resolver"
+      tabIndex={0}
+      className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
       >
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Resolver Status</h3>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-shield h-4 w-4 text-muted-foreground"
-              >
-                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
-              </svg>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="tracking-tight text-sm font-medium">Moderator Status</h3>
+          <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-shield h-4 w-4 text-muted-foreground"
+          >
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+          </svg>
+        </div>
+        <div className="p-6 pt-0">
+          <div className="flex items-center gap-2">
+          {isFetching ? (
+            <LoaderIcon />
+          ) : data?.isResolver ? (
+            <div
+            className="inline-flex bg-green-800 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
+            data-v0-t="badge"
+            >
+            Active Moderator
             </div>
-            <div className="p-6 pt-0">
-              <div className="flex items-center gap-2">
-                {isFetching ? (
-                  <LoaderIcon />
-                ) : data?.isResolver ? (
-                  <div
-                    className="inline-flex bg-green-800 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
-                    data-v0-t="badge"
-                  >
-                    Registered
-                  </div>
-                ) : (
-                  <div
-                    className="inline-flex bg-blue-500 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
-                    data-v0-t="badge"
-                  >
-                    Not Registered
-                  </div>
-                )}
-              </div>
+          ) : (
+            <div
+            className="inline-flex bg-blue-500 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
+            data-v0-t="badge"
+            >
+            Not Registered
             </div>
+          )}
           </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Staked Amount</h3>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-award h-4 w-4 text-muted-foreground"
-              >
-                <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
-                <circle cx="12" cy="8" r="6"></circle>
-              </svg>
-            </div>
-            <div className="p-6 pt-0">
-              {isFetching && data?.staked == undefined ? <LoaderIcon /> : <div className="text-2xl font-bold">{formatEther(data?.staked || BigInt(0))} CROP</div>}
-              <p className="text-xs text-muted-foreground">Minimum Required: 1000 CROP</p>
-            </div>
-          </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Earned Rewards</h3>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-award h-4 w-4 text-muted-foreground"
-              >
-                <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
-                <circle cx="12" cy="8" r="6"></circle>
-              </svg>
-            </div>
-            <div className="p-6 pt-0">
-              {isFetching && data?.reward == undefined ? <LoaderIcon /> : <div className="text-2xl font-bold">{formatEther(data?.reward || BigInt(0))} CROP</div>}
-              <p className="text-xs text-muted-foreground">From successful resolutions</p>
-              <button onClick={claimRewards} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
-                Claim Rewards
-              </button>
-            </div>
-          </div>
+        </div>
         </div>
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-          <div className="flex flex-col space-y-1.5 p-6">
-            <h3 className="text-2xl font-semibold leading-none tracking-tight">Become a Resolver</h3>
-            <p className="text-sm text-muted-foreground">
-              Stake CROP tokens to participate in dispute resolution and earn rewards
-            </p>
-          </div>
-          <div className="p-6 pt-0 space-y-4">
-            <div className="space-y-2">
-              <input
-                value={1000}
-
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Amount to stake (min. 1000 CROP)"
-                type="number"
-              />
-              <button onClick={handleBecomeResolver} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
-                Register as Resolver
-              </button>
-            </div>
-          </div>
+        <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="tracking-tight text-sm font-medium">Security Deposit</h3>
+          <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-award h-4 w-4 text-muted-foreground"
+          >
+          <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+          <circle cx="12" cy="8" r="6"></circle>
+          </svg>
         </div>
+        <div className="p-6 pt-0">
+          {isFetching && data?.staked == undefined ? <LoaderIcon /> : <div className="text-2xl font-bold">{formatEther(data?.staked || BigInt(0))} KAI</div>}
+          <p className="text-xs text-muted-foreground">Required Deposit: 1000 KAI</p>
+        </div>
+        </div>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="tracking-tight text-sm font-medium">Moderation Rewards</h3>
+          <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-award h-4 w-4 text-muted-foreground"
+          >
+          <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+          <circle cx="12" cy="8" r="6"></circle>
+          </svg>
+        </div>
+        <div className="p-6 pt-0">
+          {isFetching && data?.reward == undefined ? <LoaderIcon /> : <div className="text-2xl font-bold">{formatEther(data?.reward || BigInt(0))} KAI</div>}
+          <p className="text-xs text-muted-foreground">Earned from resolved disputes</p>
+          <button onClick={claimRewards} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+          Claim Rewards
+          </button>
+        </div>
+        </div>
+      </div>
+      {!isFetching ?  <LoaderIcon />:
+        !data?.isReolver &&<div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div className="flex flex-col space-y-1.5 p-6">
+        <h3 className="text-2xl font-semibold leading-none tracking-tight">Become a Moderator</h3>
+        <p className="text-sm text-muted-foreground">
+          Deposit KAI tokens to help resolve marketplace disputes and earn rewards
+        </p>
+        </div>
+        <div className="p-6 pt-0 space-y-4">
+        <div className="space-y-2">
+          <input
+          value={1000}
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          placeholder="Deposit amount (min. 1000 KAI)"
+          type="number"
+          />
+          <button onClick={handleBecomeResolver} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+          Register as Moderator
+          </button>
+        </div>
+        </div>
+      </div>
+      }
       </div>
     </div>
   );

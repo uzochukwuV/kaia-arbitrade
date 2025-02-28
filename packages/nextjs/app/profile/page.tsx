@@ -217,10 +217,11 @@ function Profile() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {/*  */}
-              {!isFetching && data?.map((i) => <Crop id={i} key={i} />)}
+          
+              {!isFetching && data?.map((i: bigint) => <Crop id={i} key={i} />)}
 
               {!tradeLoading &&
-                trade?.map(i => {
+                trade?.map((i:bigint) => {
                   if (i == BigInt(0)) {
                     return "";
                   }
@@ -229,7 +230,7 @@ function Profile() {
                 })}
 
               {!purchaseLoading &&
-                purchase?.map(i => {
+                purchase?.map((i:bigint) => {
                   if (i == BigInt(0)) {
                     return "";
                   }

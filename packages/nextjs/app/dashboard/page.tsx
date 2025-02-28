@@ -110,7 +110,7 @@ export default function Dashboard() {
               </svg>
             </div>
             <div className="p-6 pt-0">
-              <div className="text-2xl font-bold">3</div>
+              <div className="text-2xl font-bold">{trade?.length + purchase?.length}</div>
             </div>
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -133,7 +133,7 @@ export default function Dashboard() {
               </svg>
             </div>
             <div className="p-6 pt-0">
-              <div className="text-2xl font-bold">2</div>
+              <div className="text-2xl font-bold">{trade?.length}</div>
             </div>
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -157,7 +157,7 @@ export default function Dashboard() {
               </svg>
             </div>
             <div className="p-6 pt-0">
-              <div className="text-2xl font-bold">1</div>
+              <div className="text-2xl font-bold">{purchase?.length}</div>
             </div>
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -509,8 +509,8 @@ function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string
             </svg>
             Confirm Delivery
           </button>
-        ) : (
-          !nft?.sellerChecked && (
+        ) : ( nft?.payedFor &&
+          !nft?.sellerChecked? (
             <button
               onClick={() => handleConfirmDelivery(id, address == nft?.buyer)}
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
@@ -531,8 +531,8 @@ function ListingNFt({ id,handleopenDispute,handleConfirmDelivery }: { id: string
                 <path d="m9 12 2 2 4-4"></path>
               </svg>
               Confirm Delivery
-            </button>
-          )
+            </button>):
+          <p className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-gray-500">Still In Listing</p>
         )}
         {nft?.payedFor && nft.buyerChecked && nft.sellerChecked ? (
           <button

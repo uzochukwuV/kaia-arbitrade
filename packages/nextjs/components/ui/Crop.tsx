@@ -13,11 +13,12 @@ export function Crop({ id }: { id: bigint }) {
   const [nft, setNFt] = useState<NFTMetaData | null>();
   const [modal, setModal] = useState(false);
   const { data: connectedAddressNFT, isLoading: isConnectedAddressCounterLoading } = useScaffoldReadContract({
-    contractName: "KaiNft",
+    contractName: "KaiNFT",
     functionName: "tokenURI",
     args: [BigInt(id)],
   });
   const [price, setPrice] = useState("3");
+  console.log(connectedAddressNFT);
 
   const { data: nftData, refetch, isLoading } = useNFT({ id: connectedAddressNFT || "" });
 
@@ -171,11 +172,12 @@ export function Crop({ id }: { id: bigint }) {
 }
 
 export function useNFT({ id }: { id: string }) {
+  console.log("use query", id);
   return useQuery({
     queryKey: [id],
     queryFn: async (): Promise<any> => {
       if (!id) return;
-      const response = await fetch("api/nft", {
+      const response = await fetch("/api/nft", {
         method: "POST",
         body: JSON.stringify({ id }),
       });
