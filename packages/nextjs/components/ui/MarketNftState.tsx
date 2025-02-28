@@ -39,7 +39,7 @@ export function MarketNFTState({ id }: { id: string }) {
         sellerChecked={nft?.sellerChecked}
         buyerChecked={nft?.buyerChecked}
         quantity={nft?.quantity}
-        harvestDate={nft?.harvestDate}
+        date={nft?.date}
         tags={nft?.tags}
       />
     );
